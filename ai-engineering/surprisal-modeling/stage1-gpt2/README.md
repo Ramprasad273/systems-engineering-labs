@@ -351,8 +351,10 @@ The model leverages PyTorch 2.4+ `F.scaled_dot_product_attention`, automatically
 
 ### 4. Gradient Accumulation & Effective Batch Size
 To train with large effective batch sizes on consumer GPUs (e.g., 8 GB VRAM), adjust `gradient_accumulation_steps` and `batch_size` in `config/stage1_config.yaml`:
-$$\text{Effective Batch Size} = \text{batch\_size} \times \text{gradient\_accumulation\_steps}$$
-Default is $16 \times 4 = 64$. For 24 GB+ GPUs, increase `batch_size` to 64 and set `gradient_accumulation_steps` to 1.
+
+$$\text{Effective Batch Size} = B \times G$$
+
+Where $B$ is `batch_size` (e.g., 16) and $G$ is `gradient_accumulation_steps` (e.g., 4), yielding a default effective batch size of $16 \times 4 = 64$. For 24 GB+ GPUs, increase `batch_size` to 64 and set `gradient_accumulation_steps` to 1.
 
 ### 5. DataLoader Parallelism & Memory Pinning
 Ensure `num_workers: 4` and `pin_memory: true` in your configuration to maximize asynchronous CUDA memory transfers between host CPU and GPU tensors.

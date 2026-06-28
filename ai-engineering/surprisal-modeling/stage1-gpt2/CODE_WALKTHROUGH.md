@@ -22,29 +22,14 @@ The core principle behind **Surprisal Modeling** is that normal distributed syst
 
 ```mermaid
 graph TD
-    classDef storage fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff;
-    classDef compute fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff;
-    classDef model fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff;
-    classDef decision fill:#701a75,stroke:#ec4899,stroke-width:2px,color:#fff;
-
-    Raw["Raw HDFS Syslog Streams"] ::: storage
-    Regex["Regex Pre-Masking (<IP>, <HEX>, <DATE>)"] ::: compute
-    BPE["BPE Tokenizer (V = 5,000)"] ::: compute
-    Packer["Sequence Packing DataLoader (T = 512)"] ::: compute
-    GPT2["Custom GPT-2 Small Backbone (RoPE + SwiGLU + RMSNorm)"] ::: model
-    Loss["Token-Wise Cross-Entropy Loss"] ::: compute
-    Perplexity["Sequence Perplexity Calculation"] ::: compute
-    Calib["Extreme Value Calibration (tau = mu + 3*sigma)"] ::: decision
-    Result["Anomalous vs Normal Classification"] ::: decision
-
-    Raw --> Regex
-    Regex --> BPE
-    BPE --> Packer
-    Packer -->|Input IDs| GPT2
-    GPT2 -->|Logits| Loss
-    Loss --> Perplexity
-    Perplexity --> Calib
-    Calib --> Result
+    Raw["Raw HDFS Syslog Streams"] --> Regex["Regex Pre-Masking (<IP>, <HEX>, <DATE>)"]
+    Regex --> BPE["BPE Tokenizer (V = 5,000)"]
+    BPE --> Packer["Sequence Packing DataLoader (T = 512)"]
+    Packer -->|Input IDs| GPT2["Custom GPT-2 Small Backbone (RoPE + SwiGLU + RMSNorm)"]
+    GPT2 -->|Logits| Loss["Token-Wise Cross-Entropy Loss"]
+    Loss --> Perplexity["Sequence Perplexity Calculation"]
+    Perplexity --> Calib["Extreme Value Calibration (tau = mu + 3*sigma)"]
+    Calib --> Result["Anomalous vs Normal Classification"]
 ```
 
 ---
