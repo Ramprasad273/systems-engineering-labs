@@ -26,7 +26,7 @@ exponentiate into **perplexity** and threshold using extreme value calibration
 
 ## Repository Structure
 
-```
+```text
 stage1-gpt2/
 ├── config/
 │   └── stage1_config.yaml        # All hyperparameters in one place
@@ -347,16 +347,14 @@ Set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in your environment (pre-
 The pre-training engine automatically fuses transformer layers into optimized Triton CUDA kernels using `torch.compile(model)`. This provides a ~30–40% training speedup on Ampere and Ada Lovelace architectures (RTX 3000/4000 series, A100/H100). If running on older architectures or debugging CPU backends, disable compilation by setting `compile: false` in `config/stage1_config.yaml`.
 
 ### 3. FlashAttention Scaled Dot-Product Attention (SDPA)
-The model leverages PyTorch 2.4+ `F.scaled_dot_product_attention`, automatically selecting FlashAttention kernels or Memory-Efficient Attention kernels based on hardware support. This guarantees `O(T)` memory scaling instead of quadratic `O(T²)` memory growth.
+The model leverages PyTorch 2.4+ `F.scaled_dot_product_attention`, automatically selecting FlashAttention kernels or Memory-Efficient Attention kernels based on hardware support. This guarantees $\mathcal{O}(T)$ memory scaling instead of quadratic $\mathcal{O}(T^2)$ memory growth.
 
 ### 4. Gradient Accumulation & Effective Batch Size
 To train with large effective batch sizes on consumer GPUs (e.g., 8 GB VRAM), adjust `gradient_accumulation_steps` and `batch_size` in `config/stage1_config.yaml`:
 
-```text
-Effective Batch Size = batch_size × gradient_accumulation_steps
-```
+$$\text{Effective Batch Size} = B \times G$$
 
-With default values (`16` and `4`), the effective batch size is `16 × 4 = 64`. For 24 GB+ GPUs, increase `batch_size` to `64` and set `gradient_accumulation_steps` to `1`.
+Where $B$ is `batch_size` (e.g., 16) and $G$ is `gradient_accumulation_steps` (e.g., 4), yielding a default effective batch size of $16 \times 4 = 64$. For 24 GB+ GPUs, increase `batch_size` to 64 and set `gradient_accumulation_steps` to 1.
 
 ### 5. DataLoader Parallelism & Memory Pinning
 Ensure `num_workers: 4` and `pin_memory: true` in your configuration to maximize asynchronous CUDA memory transfers between host CPU and GPU tensors.
