@@ -146,6 +146,7 @@ To understand how the codebase executes in real-time, trace the journey of a sin
 4. **Transformer Forward Pass:** `GPT2LMHeadModel` processes the sequence. Because the token `<HEX>` following `allocateBlock:` is expected syntax in normal operations, the model assigns it a high predicted probability (e.g., $P = 0.92$).
 5. **Surprisal Calculation:** The cross-entropy loss across the sequence averages to $\mathcal{L} = 0.1527$. Perplexity is computed as $PPL = \exp(0.1527) = 1.165$.
 6. **Binary Classification:** Comparing against the calibrated threshold $\tau = 1.268$:
-   $$1.165 \le 1.268 \implies \text{Classification: NORMAL (\checkmark PASS)}$$
+   $$1.165 \le 1.268 \implies \text{Result: NORMAL}$$
+   **Final Decision:** NORMAL (PASS)
 
-If an unexpected disk failure or corruption token had occurred instead, the model would assign near-zero probability ($P < 0.001$), spiking sequence perplexity to $PPL > 4.50$, triggering an immediate **ANOMALY (\Delta ALARM)** classification.
+If an unexpected disk failure or corruption token had occurred instead, the model would assign near-zero probability ($P < 0.001$), spiking sequence perplexity to $PPL > 4.50$, triggering an immediate **ANOMALY (ALARM)** classification.
