@@ -1,0 +1,43 @@
+tokenizer:
+  vocab_size: 5000
+  special_tokens:
+    - "[PAD]"
+    - "[UNK]"
+    - "[CLS]"
+    - "[SEP]"
+    - "[MASK]"
+    - "<EOS>"
+    - "<IP>"
+    - "<HEX>"
+    - "<DATE>"
+    - "<TIME>"
+  save_path: "data/tokenizer/log_tokenizer.json"
+
+dataset:
+  url: "https://zenodo.org/records/3227177/files/HDFS_1.tar.gz"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  train_split: 0.90
+  seq_len: 512
+  batch_size: 16
+
+model:
+  n_layer: 12
+  n_head: 12
+  n_embd: 768
+  d_ff: 2048
+  layer_norm_epsilon: 1e-5
+
+training:
+  max_lr: 6.0e-4
+  min_lr: 6.0e-5
+  warmup_steps: 1000
+  max_steps: 10000
+  weight_decay: 0.1
+  gradient_accumulation_steps: 4
+  clip_grad: 1.0
+  step_sleep_sec: 0.0
+  checkpoint_interval: 2000
+  checkpoint_dir: "data/checkpoints"
+  results_path: "data/stage1_results.json"
+

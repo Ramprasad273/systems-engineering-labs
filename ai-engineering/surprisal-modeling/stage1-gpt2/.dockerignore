@@ -1,0 +1,34 @@
+# ── Large Data & Checkpoints ──────────────────────────────────────────────────
+# Do not copy data artifacts into Docker layers; docker-compose mounts ./data at runtime
+data/
+
+# ── Virtual Environments & Python Cache ───────────────────────────────────────
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Git & Version Control ─────────────────────────────────────────────────────
+.git/
+.gitignore
+.dockerignore
+
+# ── Log Files ─────────────────────────────────────────────────────────────────
+*.log
+logs.txt
+*.log.*
+
+# ── Test, Agent & IDE Artifacts ───────────────────────────────────────────────
+.pytest_cache/
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+.antigravityignore
+brain/
+scratch/
+__triton_cache/
+torch_compile_debug/
+

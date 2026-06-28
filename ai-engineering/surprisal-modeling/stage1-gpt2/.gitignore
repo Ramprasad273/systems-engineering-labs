@@ -1,0 +1,58 @@
+# ── Python runtime ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Dataset artifacts (large binary / downloaded files) ──────────────────────
+data/raw/
+data/processed/
+data/tokenizer/
+data/checkpoints/
+data/check-points/
+
+# ── Log Files (Do not push logs to git) ───────────────────────────────────────
+*.log
+logs.txt
+*.log.*
+data/**/*.log
+
+# ── Ablation runtime artifacts (large) — keep the JSON result files ───────────
+data/ablations/*.pt
+data/ablations/*_corpus.txt
+data/ablations/tok_v*.json
+
+# ── Pytest cache ──────────────────────────────────────────────────────────────
+.pytest_cache/
+tests/__pycache__/
+tests/unit/__pycache__/
+tests/integration/__pycache__/
+
+# ── IDE, Agent and OS ─────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+.antigravityignore
+brain/
+scratch/
+
+# ── Torch compile cache ───────────────────────────────────────────────────────
+__triton_cache/
+torch_compile_debug/
+
+# ── Temp tokenizer files ──────────────────────────────────────────────────────
+*.masked
+config/test_*.yaml
+

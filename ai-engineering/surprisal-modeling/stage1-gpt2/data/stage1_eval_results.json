@@ -1,0 +1,25 @@
+{
+    "calibration": {
+        "mean_val_perplexity": 1.1649640359772886,
+        "std_val_perplexity": 0.03450432637635462,
+        "threshold_tau": 1.2684770151063525
+    },
+    "test_metrics": {
+        "accuracy": 0.9527394338090585,
+        "precision": 0.9462050599201065,
+        "recall": 0.8440432355386626,
+        "f1": 0.8922091782283885,
+        "tp": 14212,
+        "fp": 808,
+        "tn": 55015,
+        "fn": 2626
+    },
+    "vram_sweep_mb": {
+        "128": 1572.37,
+        "256": 1575.8,
+        "512": 1580.31,
+        "1024": 1602.46,
+        "2048": 1616.49
+    },
+    "checkpoint_evaluated": "data/checkpoints/checkpoint_10000.pt"
+}

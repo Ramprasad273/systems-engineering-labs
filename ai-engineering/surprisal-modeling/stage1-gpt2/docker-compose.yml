@@ -1,0 +1,32 @@
+services:
+  surprisal-gpt2-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: surprisal-gpt2-container
+    ipc: host
+    shm_size: '8gb'
+    volumes:
+      # Map volume mounts as specified: ./data/ to /workspace/data/
+      - ./data:/workspace/data
+      # Map current project directory to workspace for active development
+      - .:/workspace
+      # --- WSL2 GPU Driver Fix ---
+      # Mount the WSL2 host driver library directories so the container can
+      # resolve CUDA symbols that live outside the standard /usr/lib/wsl/lib path.
+      # This is required for NVIDIA driver >= 560 on Windows/WSL2 Docker Desktop.
+      - /usr/lib/wsl:/usr/lib/wsl:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - OMP_NUM_THREADS=4
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
