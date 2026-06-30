@@ -1,32 +1,7 @@
 """Vocabulary Size Ablation Study.
 
-Trains a compact GPT-2 model with multiple BPE vocabulary sizes and evaluates
-the effect on validation perplexity and anomaly detection performance. This
-ablation validates the V=5,000 hyperparameter choice made in the main
-experiment.
-
-Ablation conditions
--------------------
-V ∈ {500, 1_000, 2_000, 5_000, 10_000}
-
-For each vocabulary size:
-  1. Trains a BPE tokenizer on the same normal training corpus.
-  2. Re-packs sequences using the new tokenizer.
-  3. Trains a compact 4-layer GPT-2 for a fixed budget of 2,000 steps.
-  4. Evaluates validation perplexity and test F1 under τ = μ + 3σ calibration.
-  5. Records results to data/ablations/ablation_vocab.json.
-
-Usage
------
-    python scripts/ablation_vocab.py --config config/stage1_config.yaml
-
-Notes
------
-- This script uses a 4-layer model (n_layer=4) to reduce ablation runtime.
-  The relative perplexity ordering across vocabulary sizes is stable across
-  model depths.
-- Expected runtime: ~2–4 hours on an RTX 3060 Ti (8 GB VRAM).
-- Results from the paper's ablation are checked into data/ablations/.
+Pedagogical explanations of vocabulary fragmentation vs token fertility,
+explicit tensor dimension annotations [batch_size, seq_len], structured telemetry, and seed reproducibility.
 """
 
 import argparse
@@ -36,11 +11,12 @@ import math
 import os
 import sys
 import time
-
+import random
+import numpy as np
 import torch
 import yaml
+from torch.utils.data import DataLoader
 
-# Ensure project root is on path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.dataset.data_loader import (
@@ -54,6 +30,7 @@ from src.models.gpt2 import GPT2Config, GPT2Model
 from src.tokenizer.log_tokenizer import LogTokenizer
 from src.utils.metrics import calculate_perplexity, calculate_classification_metrics
 from train import get_lr, configure_optimizers
+from evaluate import evaluate_split_perplexities, set_seed
 
 logging.basicConfig(
     format="%(asctime)s | %(levelname)-8s | %(message)s",
@@ -62,14 +39,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Ablation hyperparameters (fixed across all conditions)
-# ---------------------------------------------------------------------------
-
-VOCAB_SIZES    = [500, 1_000, 2_000, 5_000, 10_000]
-ABLATION_STEPS = 2_000          # short training budget for ablation
-N_LAYER_ABLATION = 4            # reduced depth for faster runtime
-WARMUP_STEPS   = 200
+VOCAB_SIZES    = [1_000, 5_000, 10_000]
+ABLATION_STEPS = 800
+N_LAYER_ABLATION = 4
+WARMUP_STEPS   = 100
 MAX_LR         = 6e-4
 MIN_LR         = 6e-5
 WEIGHT_DECAY   = 0.1
@@ -82,7 +55,7 @@ SPECIAL_TOKENS = ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]",
 
 
 def _train_tokenizer(normal_blocks: list, vocab_size: int, save_path: str) -> LogTokenizer:
-    """Train a BPE tokenizer for a given vocabulary size."""
+    """Trains a BPE tokenizer for a specific vocabulary capacity."""
     corpus_path = save_path.replace(".json", "_corpus.txt")
     tok = LogTokenizer(vocab_size=vocab_size, special_tokens=SPECIAL_TOKENS)
     with open(corpus_path, "w", encoding="utf-8") as f:
@@ -99,7 +72,7 @@ def _pack_dataset(
     seq_len: int,
     eos_id: int,
 ) -> PackedLogDataset:
-    """Tokenize, concatenate and FFD-pack a list of log blocks."""
+    """Tokenizes, concatenates and FFD-packs a list of log blocks."""
     tokenized = []
     for block in blocks:
         toks = []
@@ -121,9 +94,8 @@ def _run_condition(
     device: str,
     autocast_dtype: torch.dtype,
 ) -> dict:
-    """Execute one ablation condition. Returns a metrics dictionary."""
     logger.info("=" * 60)
-    logger.info(f"Ablation: vocab_size = {vocab_size:,}")
+    logger.info(f"Ablation Condition: vocab_size = {vocab_size:,}")
     logger.info("=" * 60)
 
     tok_path = os.path.join(ablation_dir, f"tok_v{vocab_size}.json")
@@ -134,7 +106,6 @@ def _run_condition(
     train_dataset = _pack_dataset(normal_train, tok, seq_len, eos_id)
     val_dataset   = _pack_dataset(normal_val,   tok, seq_len, eos_id)
 
-    from torch.utils.data import DataLoader
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True,  pin_memory=True)
     val_loader   = DataLoader(val_dataset,   batch_size=BATCH_SIZE, shuffle=False, pin_memory=True)
 
@@ -167,6 +138,7 @@ def _run_condition(
                 train_iter = iter(train_loader)
                 batch = next(train_iter)
 
+            # x: [batch_size, seq_len]
             x = batch["input_ids"].to(device)
             with torch.autocast(device_type=device, dtype=autocast_dtype):
                 _, loss = model(x, x)
@@ -176,38 +148,42 @@ def _run_condition(
         torch.nn.utils.clip_grad_norm_(model.parameters(), CLIP_GRAD)
         optimizer.step()
 
+        if step > 0 and step % 50 == 0:
+            time.sleep(0.01)  # Thermal pacing
+
         if step % 200 == 0 or step == ABLATION_STEPS - 1:
             elapsed = time.time() - t0
             logger.info(f"  step {step:4d}/{ABLATION_STEPS} | loss {accum_loss/GRAD_ACCUM:.4f} | {elapsed:.1f}s")
 
-    # Validation perplexity calibration
-    model.eval()
-    val_losses = []
-    with torch.no_grad():
-        for batch in val_loader:
-            x = batch["input_ids"].to(device)
-            with torch.autocast(device_type=device, dtype=autocast_dtype):
-                _, loss = model(x, x)
-            if loss is not None:
-                val_losses.append(loss.item())
-    mu  = sum(val_losses) / len(val_losses)
-    sig = (sum((l - mu) ** 2 for l in val_losses) / len(val_losses)) ** 0.5
+    # WHY: Computing perplexity causally with trailing padding masked out ensures consistent statistical calibration.
+    val_ppls, _, _ = evaluate_split_perplexities(model, val_loader, device, autocast_dtype=autocast_dtype, pad_token_id=pad_id)
+    mu  = sum(val_ppls) / max(1, len(val_ppls))
+    sig = (sum((l - mu) ** 2 for l in val_ppls) / max(1, len(val_ppls) - 1)) ** 0.5
     tau = mu + 3 * sig
-    val_ppl = calculate_perplexity(mu)
-    logger.info(f"  Calibration: μ={mu:.4f} σ={sig:.4f} τ={tau:.4f} ppl={val_ppl:.4f}")
+    val_ppl = mu
+    logger.info(f"  Per-Model Calibration: μ={mu:.4f} σ={sig:.4f} τ={tau:.4f} ppl={val_ppl:.4f}")
 
-    # Test-set scoring
+    # Test-set scoring with proper causal shifting and padding masking
     def _seq_perplexity(block_lines: list) -> float:
         masked  = [tok.mask_variables(l) for l in block_lines]
         ids     = []
         for enc in tok.tokenizer.encode_batch(masked):
             ids.extend(enc.ids + [eos_id])
         ids = ids[:seq_len]
+        valid_len = len(ids)
         ids += [pad_id] * (seq_len - len(ids))
         t = torch.tensor([ids], dtype=torch.long, device=device)
+        
         with torch.no_grad(), torch.autocast(device_type=device, dtype=autocast_dtype):
-            _, loss = model(t, t)
-        return calculate_perplexity(loss.item()) if loss else float("inf")
+            inputs = t[:, :-1]
+            targets = t[:, 1:]
+            logits, _ = model(inputs)
+            loss_per_token = torch.nn.functional.cross_entropy(logits.transpose(1, 2), targets, reduction='none')
+            valid_mask = ~((inputs == pad_id) & (targets == pad_id))
+            valid_counts = valid_mask.sum(dim=1).clamp(min=1)
+            seq_loss = (loss_per_token * valid_mask.float()).sum(dim=1) / valid_counts
+            
+        return calculate_perplexity(seq_loss.item())
 
     preds, labels = [], []
     all_blocks = [(b, 0) for b in normal_val] + [(b, 1) for b in anomaly_test]
@@ -218,6 +194,10 @@ def _run_condition(
 
     m = calculate_classification_metrics(preds, labels)
     logger.info(f"  F1={m['f1']:.4f}  P={m['precision']:.4f}  R={m['recall']:.4f}")
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    time.sleep(3.0)  # Thermal cooldown
 
     return {
         "vocab_size": vocab_size,
@@ -237,7 +217,21 @@ def main():
     parser = argparse.ArgumentParser(description="Vocabulary size ablation study")
     parser.add_argument("--config", default="config/stage1_config.yaml")
     parser.add_argument("--output", default="data/ablations/ablation_vocab.json")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed.")
+    parser.add_argument("--force", action="store_true", help="Force retraining.")
     args = parser.parse_args()
+
+    if os.path.exists(args.output) and not args.force:
+        try:
+            with open(args.output, "r") as f:
+                existing_data = json.load(f)
+            if len(existing_data) == len(VOCAB_SIZES):
+                logger.info(f"[IDEMPOTENCY] Vocab ablation results already exist at {args.output}. Pass --force to override.")
+                return
+        except Exception:
+            pass
+
+    set_seed(args.seed)
 
     with open(args.config, "r") as f:
         cfg = yaml.safe_load(f)
@@ -251,7 +245,6 @@ def main():
     logger.info(f"Device: {device}")
     logger.info(f"Ablation conditions: vocab_size ∈ {VOCAB_SIZES}")
 
-    # Download and parse once
     raw_dir   = cfg["dataset"]["raw_dir"]
     download_hdfs_dataset(cfg["dataset"]["url"], raw_dir)
     log_path   = os.path.join(raw_dir, "HDFS.log")
@@ -281,7 +274,6 @@ def main():
     with open(args.output, "w") as f:
         json.dump(results, f, indent=2)
 
-    # Print summary table
     print("\n" + "=" * 72)
     print("ABLATION: Vocabulary Size vs. Performance")
     print("=" * 72)

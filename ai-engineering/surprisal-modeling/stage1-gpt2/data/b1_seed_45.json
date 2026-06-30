@@ -21,5 +21,5 @@
         "1024": 1602.46,
         "2048": 1616.49
     },
-    "checkpoint_evaluated": "data/checkpoints\\checkpoint_10000.pt"
+    "checkpoint_evaluated": "data/checkpoints/checkpoint_10000.pt"
 }

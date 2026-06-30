@@ -1,0 +1,1026 @@
+{
+    "normal": [
+        [
+            {
+                "token": "Receiving",
+                "surprisal": 0.0
+            },
+            {
+                "token": "block",
+                "surprisal": 9.036579132080078
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 7.152555099310121e-07
+            },
+            {
+                "token": "src",
+                "surprisal": 13.42253303527832
+            },
+            {
+                "token": ":",
+                "surprisal": 2.3841855067985307e-07
+            },
+            {
+                "token": "<IP>",
+                "surprisal": 3.576278118089249e-07
+            },
+            {
+                "token": "dest",
+                "surprisal": 0.0014000862138345838
+            },
+            {
+                "token": ":",
+                "surprisal": -0.0
+            },
+            {
+                "token": "<IP>",
+                "surprisal": 1.0728830375228426e-06
+            }
+        ],
+        [
+            {
+                "token": "BLOCK",
+                "surprisal": 0.0
+            },
+            {
+                "token": "*",
+                "surprisal": 7.986217498779297
+            },
+            {
+                "token": "NameSystem",
+                "surprisal": 7.416571140289307
+            },
+            {
+                "token": ".",
+                "surprisal": 7.011392593383789
+            },
+            {
+                "token": "allocateBlock",
+                "surprisal": 4.44569730758667
+            },
+            {
+                "token": ":",
+                "surprisal": -0.0
+            },
+            {
+                "token": "/",
+                "surprisal": 7.152555099310121e-07
+            },
+            {
+                "token": "mnt",
+                "surprisal": 2.4103546142578125
+            },
+            {
+                "token": "/",
+                "surprisal": 9.417489309271332e-06
+            },
+            {
+                "token": "hadoop",
+                "surprisal": 0.3548222482204437
+            },
+            {
+                "token": "/",
+                "surprisal": 1.2055696249008179
+            },
+            {
+                "token": "dfs",
+                "surprisal": 13.558690071105957
+            },
+            {
+                "token": "/",
+                "surprisal": 5.960462772236497e-07
+            },
+            {
+                "token": "data",
+                "surprisal": 3.5040407180786133
+            },
+            {
+                "token": "/",
+                "surprisal": 3.576278118089249e-07
+            },
+            {
+                "token": "current",
+                "surprisal": 4.186797142028809
+            },
+            {
+                "token": "/",
+                "surprisal": 0.0012841321295127273
+            },
+            {
+                "token": "r",
+                "surprisal": 14.323620796203613
+            },
+            {
+                "token": "b",
+                "surprisal": 10.855340957641602
+            },
+            {
+                "token": "w",
+                "surprisal": 14.424095153808594
+            },
+            {
+                "token": "/",
+                "surprisal": 2.424133062362671
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 4.389946937561035
+            }
+        ],
+        [
+            {
+                "token": "PacketResponder",
+                "surprisal": 0.0
+            },
+            {
+                "token": "1",
+                "surprisal": 8.008566856384277
+            },
+            {
+                "token": "for",
+                "surprisal": 13.449796676635742
+            },
+            {
+                "token": "block",
+                "surprisal": 6.82804012298584
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 2.3841855067985307e-07
+            },
+            {
+                "token": "terminating",
+                "surprisal": 7.384572982788086
+            }
+        ],
+        [
+            {
+                "token": "Received",
+                "surprisal": 0.0
+            },
+            {
+                "token": "block",
+                "surprisal": 8.814376831054688
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": -0.0
+            },
+            {
+                "token": "of",
+                "surprisal": 11.768122673034668
+            },
+            {
+                "token": "size",
+                "surprisal": 11.615644454956055
+            },
+            {
+                "token": "67108864",
+                "surprisal": 5.666103363037109
+            },
+            {
+                "token": "from",
+                "surprisal": 4.581657409667969
+            },
+            {
+                "token": "<IP>",
+                "surprisal": 0.001644331612624228
+            }
+        ],
+        [
+            {
+                "token": "Verification",
+                "surprisal": 0.0
+            },
+            {
+                "token": "succeeded",
+                "surprisal": 10.594945907592773
+            },
+            {
+                "token": "for",
+                "surprisal": 6.652187347412109
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 3.159980535507202
+            }
+        ]
+    ],
+    "anomalous": [
+        [
+            {
+                "token": "E",
+                "surprisal": 0.0
+            },
+            {
+                "token": "x",
+                "surprisal": 10.545321464538574
+            },
+            {
+                "token": "cept",
+                "surprisal": 12.446518898010254
+            },
+            {
+                "token": "ion",
+                "surprisal": 12.148547172546387
+            },
+            {
+                "token": "in",
+                "surprisal": 9.955726623535156
+            },
+            {
+                "token": "r",
+                "surprisal": 10.497339248657227
+            },
+            {
+                "token": "eceiv",
+                "surprisal": 11.33574104309082
+            },
+            {
+                "token": "e",
+                "surprisal": 10.31191635131836
+            },
+            {
+                "token": "Block",
+                "surprisal": 11.81629467010498
+            },
+            {
+                "token": "for",
+                "surprisal": 11.925251960754395
+            },
+            {
+                "token": "block",
+                "surprisal": 8.790472030639648
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 9.536738616588991e-07
+            },
+            {
+                "token": "j",
+                "surprisal": 16.134689331054688
+            },
+            {
+                "token": "a",
+                "surprisal": 12.680021286010742
+            },
+            {
+                "token": "v",
+                "surprisal": 12.234041213989258
+            },
+            {
+                "token": "a",
+                "surprisal": 11.001073837280273
+            },
+            {
+                "token": ".",
+                "surprisal": 7.810784816741943
+            },
+            {
+                "token": "i",
+                "surprisal": 11.875370025634766
+            },
+            {
+                "token": "o",
+                "surprisal": 6.8659515380859375
+            },
+            {
+                "token": ".",
+                "surprisal": 7.852450370788574
+            },
+            {
+                "token": "I",
+                "surprisal": 13.151694297790527
+            },
+            {
+                "token": "O",
+                "surprisal": 7.411983966827393
+            },
+            {
+                "token": "E",
+                "surprisal": 6.728142261505127
+            },
+            {
+                "token": "x",
+                "surprisal": 6.7051777839660645
+            },
+            {
+                "token": "cept",
+                "surprisal": 8.542160987854004
+            },
+            {
+                "token": "ion",
+                "surprisal": 6.945717811584473
+            },
+            {
+                "token": ":",
+                "surprisal": 9.945623397827148
+            },
+            {
+                "token": "C",
+                "surprisal": 8.285333633422852
+            },
+            {
+                "token": "on",
+                "surprisal": 4.389997482299805
+            },
+            {
+                "token": "n",
+                "surprisal": 3.7053608894348145
+            },
+            {
+                "token": "e",
+                "surprisal": 5.406174659729004
+            },
+            {
+                "token": "c",
+                "surprisal": 4.323080539703369
+            },
+            {
+                "token": "t",
+                "surprisal": 5.516903877258301
+            },
+            {
+                "token": "ion",
+                "surprisal": 6.608065128326416
+            },
+            {
+                "token": "r",
+                "surprisal": 4.297122001647949
+            },
+            {
+                "token": "es",
+                "surprisal": 5.200963497161865
+            },
+            {
+                "token": "et",
+                "surprisal": 6.336950778961182
+            },
+            {
+                "token": "b",
+                "surprisal": 7.830680847167969
+            },
+            {
+                "token": "y",
+                "surprisal": 10.74832820892334
+            },
+            {
+                "token": "p",
+                "surprisal": 4.997410774230957
+            },
+            {
+                "token": "e",
+                "surprisal": 5.281441688537598
+            },
+            {
+                "token": "er",
+                "surprisal": 7.045224189758301
+            }
+        ],
+        [
+            {
+                "token": "E",
+                "surprisal": 0.0
+            },
+            {
+                "token": "R",
+                "surprisal": 11.146917343139648
+            },
+            {
+                "token": "R",
+                "surprisal": 11.206205368041992
+            },
+            {
+                "token": "O",
+                "surprisal": 11.59141731262207
+            },
+            {
+                "token": "R",
+                "surprisal": 11.361248970031738
+            },
+            {
+                "token": "DataNode",
+                "surprisal": 13.54822063446045
+            },
+            {
+                "token": ":",
+                "surprisal": 13.012262344360352
+            },
+            {
+                "token": "DataTransfer",
+                "surprisal": 13.817628860473633
+            },
+            {
+                "token": ":",
+                "surprisal": 6.366052150726318
+            },
+            {
+                "token": "j",
+                "surprisal": 7.915963172912598
+            },
+            {
+                "token": "a",
+                "surprisal": 10.058265686035156
+            },
+            {
+                "token": "v",
+                "surprisal": 12.965189933776855
+            },
+            {
+                "token": "a",
+                "surprisal": 12.139860153198242
+            },
+            {
+                "token": ".",
+                "surprisal": 3.435135841369629
+            },
+            {
+                "token": "i",
+                "surprisal": 9.478212356567383
+            },
+            {
+                "token": "o",
+                "surprisal": 5.230820655822754
+            },
+            {
+                "token": ".",
+                "surprisal": 1.7965344190597534
+            },
+            {
+                "token": "E",
+                "surprisal": 13.858047485351562
+            },
+            {
+                "token": "O",
+                "surprisal": 11.109923362731934
+            },
+            {
+                "token": "F",
+                "surprisal": 10.242165565490723
+            },
+            {
+                "token": "E",
+                "surprisal": 8.629210472106934
+            },
+            {
+                "token": "x",
+                "surprisal": 6.6179962158203125
+            },
+            {
+                "token": "cept",
+                "surprisal": 8.235158920288086
+            },
+            {
+                "token": "ion",
+                "surprisal": 8.242393493652344
+            },
+            {
+                "token": "at",
+                "surprisal": 8.938299179077148
+            },
+            {
+                "token": "j",
+                "surprisal": 7.146245956420898
+            },
+            {
+                "token": "a",
+                "surprisal": 5.802781105041504
+            },
+            {
+                "token": "v",
+                "surprisal": 7.577071666717529
+            },
+            {
+                "token": "a",
+                "surprisal": 7.621374130249023
+            },
+            {
+                "token": ".",
+                "surprisal": 1.1376011371612549
+            },
+            {
+                "token": "i",
+                "surprisal": 4.404426574707031
+            },
+            {
+                "token": "o",
+                "surprisal": 6.655329704284668
+            },
+            {
+                "token": ".",
+                "surprisal": 3.4075589179992676
+            },
+            {
+                "token": "Data",
+                "surprisal": 7.933192253112793
+            },
+            {
+                "token": "I",
+                "surprisal": 7.263666152954102
+            },
+            {
+                "token": "n",
+                "surprisal": 3.6024606227874756
+            },
+            {
+                "token": "p",
+                "surprisal": 5.966189384460449
+            },
+            {
+                "token": "u",
+                "surprisal": 4.927337646484375
+            },
+            {
+                "token": "t",
+                "surprisal": 5.810772895812988
+            },
+            {
+                "token": "St",
+                "surprisal": 7.114843368530273
+            },
+            {
+                "token": "re",
+                "surprisal": 5.326118469238281
+            },
+            {
+                "token": "a",
+                "surprisal": 6.04935884475708
+            },
+            {
+                "token": "m",
+                "surprisal": 4.388003349304199
+            },
+            {
+                "token": ".",
+                "surprisal": 5.733301162719727
+            },
+            {
+                "token": "re",
+                "surprisal": 5.855258941650391
+            },
+            {
+                "token": "ad",
+                "surprisal": 7.053407669067383
+            },
+            {
+                "token": "F",
+                "surprisal": 7.250540733337402
+            },
+            {
+                "token": "u",
+                "surprisal": 5.673760890960693
+            },
+            {
+                "token": "l",
+                "surprisal": 4.554811954498291
+            },
+            {
+                "token": "l",
+                "surprisal": 5.588962554931641
+            },
+            {
+                "token": "y",
+                "surprisal": 8.301483154296875
+            }
+        ],
+        [
+            {
+                "token": "F",
+                "surprisal": 0.0
+            },
+            {
+                "token": "AT",
+                "surprisal": 11.58798599243164
+            },
+            {
+                "token": "A",
+                "surprisal": 11.537580490112305
+            },
+            {
+                "token": "L",
+                "surprisal": 11.611480712890625
+            },
+            {
+                "token": "DataNode",
+                "surprisal": 13.909627914428711
+            },
+            {
+                "token": "terminating",
+                "surprisal": 17.405324935913086
+            },
+            {
+                "token": "d",
+                "surprisal": 10.68379020690918
+            },
+            {
+                "token": "u",
+                "surprisal": 10.838022232055664
+            },
+            {
+                "token": "e",
+                "surprisal": 10.007562637329102
+            },
+            {
+                "token": "to",
+                "surprisal": 6.230533123016357
+            },
+            {
+                "token": "u",
+                "surprisal": 6.505130290985107
+            },
+            {
+                "token": "n",
+                "surprisal": 7.01547908782959
+            },
+            {
+                "token": "re",
+                "surprisal": 8.139505386352539
+            },
+            {
+                "token": "c",
+                "surprisal": 7.2789716720581055
+            },
+            {
+                "token": "o",
+                "surprisal": 5.174469470977783
+            },
+            {
+                "token": "v",
+                "surprisal": 9.884622573852539
+            },
+            {
+                "token": "er",
+                "surprisal": 10.116340637207031
+            },
+            {
+                "token": "a",
+                "surprisal": 9.690217971801758
+            },
+            {
+                "token": "b",
+                "surprisal": 6.5597758293151855
+            },
+            {
+                "token": "le",
+                "surprisal": 9.316597938537598
+            },
+            {
+                "token": "d",
+                "surprisal": 8.932201385498047
+            },
+            {
+                "token": "is",
+                "surprisal": 9.422898292541504
+            },
+            {
+                "token": "k",
+                "surprisal": 11.179903030395508
+            },
+            {
+                "token": "I",
+                "surprisal": 9.777371406555176
+            },
+            {
+                "token": "O",
+                "surprisal": 9.610176086425781
+            },
+            {
+                "token": "er",
+                "surprisal": 9.0328369140625
+            },
+            {
+                "token": "ro",
+                "surprisal": 9.193095207214355
+            },
+            {
+                "token": "r",
+                "surprisal": 7.413354873657227
+            },
+            {
+                "token": "on",
+                "surprisal": 8.237643241882324
+            },
+            {
+                "token": "/",
+                "surprisal": 5.873177528381348
+            },
+            {
+                "token": "mnt",
+                "surprisal": 9.697542190551758
+            },
+            {
+                "token": "/",
+                "surprisal": 1.8611215353012085
+            },
+            {
+                "token": "hadoop",
+                "surprisal": 8.984068870544434
+            },
+            {
+                "token": "/",
+                "surprisal": 3.6639370918273926
+            },
+            {
+                "token": "dfs",
+                "surprisal": 8.077051162719727
+            },
+            {
+                "token": "/",
+                "surprisal": 0.615439236164093
+            },
+            {
+                "token": "data",
+                "surprisal": 8.477590560913086
+            },
+            {
+                "token": "1",
+                "surprisal": 7.659921646118164
+            }
+        ],
+        [
+            {
+                "token": "WARN",
+                "surprisal": 0.0
+            },
+            {
+                "token": "NameSystem",
+                "surprisal": 21.560447692871094
+            },
+            {
+                "token": ":",
+                "surprisal": 23.408761978149414
+            },
+            {
+                "token": "Block",
+                "surprisal": 23.124649047851562
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 15.116917610168457
+            },
+            {
+                "token": "m",
+                "surprisal": 11.765620231628418
+            },
+            {
+                "token": "is",
+                "surprisal": 4.734087944030762
+            },
+            {
+                "token": "s",
+                "surprisal": 14.09528923034668
+            },
+            {
+                "token": "ing",
+                "surprisal": 11.005487442016602
+            },
+            {
+                "token": "repl",
+                "surprisal": 13.802865982055664
+            },
+            {
+                "token": "i",
+                "surprisal": 9.95217514038086
+            },
+            {
+                "token": "c",
+                "surprisal": 6.303362846374512
+            },
+            {
+                "token": "as",
+                "surprisal": 9.987272262573242
+            },
+            {
+                "token": "a",
+                "surprisal": 10.078084945678711
+            },
+            {
+                "token": "c",
+                "surprisal": 8.806821823120117
+            },
+            {
+                "token": "ro",
+                "surprisal": 10.823183059692383
+            },
+            {
+                "token": "s",
+                "surprisal": 10.148762702941895
+            },
+            {
+                "token": "s",
+                "surprisal": 7.145516872406006
+            },
+            {
+                "token": "al",
+                "surprisal": 7.58781623840332
+            },
+            {
+                "token": "l",
+                "surprisal": 9.4749174118042
+            },
+            {
+                "token": "a",
+                "surprisal": 10.175030708312988
+            },
+            {
+                "token": "v",
+                "surprisal": 12.194805145263672
+            },
+            {
+                "token": "a",
+                "surprisal": 13.198806762695312
+            },
+            {
+                "token": "i",
+                "surprisal": 11.052534103393555
+            },
+            {
+                "token": "l",
+                "surprisal": 5.746527671813965
+            },
+            {
+                "token": "a",
+                "surprisal": 10.314013481140137
+            },
+            {
+                "token": "b",
+                "surprisal": 9.257162094116211
+            },
+            {
+                "token": "le",
+                "surprisal": 12.744951248168945
+            },
+            {
+                "token": "s",
+                "surprisal": 8.685657501220703
+            },
+            {
+                "token": "to",
+                "surprisal": 7.509617328643799
+            },
+            {
+                "token": "ra",
+                "surprisal": 9.593039512634277
+            },
+            {
+                "token": "g",
+                "surprisal": 9.919866561889648
+            },
+            {
+                "token": "e",
+                "surprisal": 11.201947212219238
+            },
+            {
+                "token": "node",
+                "surprisal": 11.875143051147461
+            },
+            {
+                "token": "s",
+                "surprisal": 8.801918983459473
+            }
+        ],
+        [
+            {
+                "token": "U",
+                "surprisal": 0.0
+            },
+            {
+                "token": "n",
+                "surprisal": 10.366228103637695
+            },
+            {
+                "token": "ex",
+                "surprisal": 11.630208969116211
+            },
+            {
+                "token": "p",
+                "surprisal": 9.842985153198242
+            },
+            {
+                "token": "e",
+                "surprisal": 9.935209274291992
+            },
+            {
+                "token": "c",
+                "surprisal": 9.53211498260498
+            },
+            {
+                "token": "ted",
+                "surprisal": 11.034329414367676
+            },
+            {
+                "token": "p",
+                "surprisal": 9.629664421081543
+            },
+            {
+                "token": "a",
+                "surprisal": 11.188974380493164
+            },
+            {
+                "token": "cket",
+                "surprisal": 11.268043518066406
+            },
+            {
+                "token": "s",
+                "surprisal": 11.725659370422363
+            },
+            {
+                "token": "e",
+                "surprisal": 10.296258926391602
+            },
+            {
+                "token": "q",
+                "surprisal": 11.076778411865234
+            },
+            {
+                "token": "u",
+                "surprisal": 10.69830322265625
+            },
+            {
+                "token": "e",
+                "surprisal": 10.664653778076172
+            },
+            {
+                "token": "n",
+                "surprisal": 10.55129337310791
+            },
+            {
+                "token": "ce",
+                "surprisal": 12.280471801757812
+            },
+            {
+                "token": "n",
+                "surprisal": 10.522477149963379
+            },
+            {
+                "token": "u",
+                "surprisal": 11.364436149597168
+            },
+            {
+                "token": "m",
+                "surprisal": 9.672514915466309
+            },
+            {
+                "token": "b",
+                "surprisal": 9.601893424987793
+            },
+            {
+                "token": "er",
+                "surprisal": 12.290428161621094
+            },
+            {
+                "token": "99",
+                "surprisal": 9.239253997802734
+            },
+            {
+                "token": "482",
+                "surprisal": 9.745149612426758
+            },
+            {
+                "token": "r",
+                "surprisal": 12.03503704071045
+            },
+            {
+                "token": "eceiv",
+                "surprisal": 12.323234558105469
+            },
+            {
+                "token": "ed",
+                "surprisal": 11.691366195678711
+            },
+            {
+                "token": "for",
+                "surprisal": 10.584442138671875
+            },
+            {
+                "token": "<HEX>",
+                "surprisal": 9.324079513549805
+            },
+            {
+                "token": "ex",
+                "surprisal": 13.747775077819824
+            },
+            {
+                "token": "p",
+                "surprisal": 11.086738586425781
+            },
+            {
+                "token": "e",
+                "surprisal": 10.602563858032227
+            },
+            {
+                "token": "c",
+                "surprisal": 10.337015151977539
+            },
+            {
+                "token": "ted",
+                "surprisal": 12.621626853942871
+            },
+            {
+                "token": "102",
+                "surprisal": 6.484312057495117
+            }
+        ]
+    ]
+}

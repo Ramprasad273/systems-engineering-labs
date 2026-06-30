@@ -1,0 +1,100 @@
+# ==============================================================================
+# Enterprise Systems Engineering Labs — Root .gitignore
+# ==============================================================================
+
+# ── 1. Secrets & Environment Variables ────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+*.cert
+*.crt
+credentials.json
+service-account*.json
+secrets.yaml
+secrets.yml
+*_rsa
+*_dsa
+*.keystore
+*.jks
+
+# ── 2. Python & Virtual Environments ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.dylib
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ── 3. PyTorch, Machine Learning & Large Artifacts ────────────────────────────
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+*.h5
+*.hdf5
+*.tflite
+*.pb
+checkpoints/
+checkpoint_*.pt
+__triton_cache/
+torch_compile_debug/
+
+# ── 4. Large Data Files & Logs ────────────────────────────────────────────────
+*.log
+*.log.*
+logs/
+*.parquet
+*.feather
+*.tfrecords
+*.sqlite3
+*.db
+*.npz
+
+# ── 5. Big Data & Data Engineering (Spark, Flink, Kafka) ──────────────────────
+target/
+build/
+dist/
+*.jar
+*.war
+*.ear
+derby.log
+metastore_db/
+_SUCCESS
+*.crc
+
+# ── 6. Testing, CI & Coverage ─────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# ── 7. IDE, OS & Agent Workspaces ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.gemini/
+.antigravityignore
+brain/
+scratch/

@@ -48,11 +48,24 @@ Thumbs.db
 brain/
 scratch/
 
+# ── Secrets & Environment Variables ───────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+*.cert
+
 # ── Torch compile cache ───────────────────────────────────────────────────────
 __triton_cache/
 torch_compile_debug/
 
-# ── Temp tokenizer files ──────────────────────────────────────────────────────
+# ── Temp tokenizer files & Large intermediate caches ──────────────────────────
 *.masked
 config/test_*.yaml
+data/val_perplexities.json
+*.pt
+*.pth
+*.safetensors
+*.bin
+
 

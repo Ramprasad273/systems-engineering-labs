@@ -1,62 +1,18 @@
 {
-  "tokenizer_path": "data/tokenizer/log_tokenizer.json",
-  "vocab_size": 5000,
-  "unk_token_id": 1,
-  "normal": {
-    "label": "normal",
-    "blocks_analyzed": 5000,
-    "total_tokens": 1357352,
-    "total_unk": 0,
-    "unk_rate": 0.0,
-    "top_unk_contexts": []
-  },
-  "anomaly": {
-    "label": "anomaly",
-    "blocks_analyzed": 5000,
-    "total_tokens": 1674052,
-    "total_unk": 60,
-    "unk_rate": 3.5841180560699426e-05,
-    "top_unk_contexts": [
-      {
-        "masked_line": "<DATE> <TIME> 640 INFO dfs.DataNode$PacketResponder: PacketResponder <HEX> 2 Exc",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 591 INFO dfs.DataNode$PacketResponder: PacketResponder <HEX> 1 Exc",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 1238 INFO dfs.DataNode$PacketResponder: PacketResponder <HEX> 2 Ex",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 1076 INFO dfs.DataNode$PacketResponder: PacketResponder <HEX> 1 Ex",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 1237 INFO dfs.DataNode$BlockReceiver: Exception in receiveBlock fo",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 1237 INFO dfs.DataNode$DataXceiver: writeBlock <HEX> received exce",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 4186 INFO dfs.DataNode$PacketResponder: PacketResponder <HEX> 2 Ex",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 4185 INFO dfs.DataNode$BlockReceiver: Exception in receiveBlock fo",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 4185 INFO dfs.DataNode$DataXceiver: writeBlock <HEX> received exce",
-        "count": 4
-      },
-      {
-        "masked_line": "<DATE> <TIME> 5769 INFO dfs.DataNode$BlockReceiver: Exception in receiveBlock fo",
-        "count": 4
-      }
-    ]
-  }
+    "analysis": "Vocabulary stability verification across normal and anomalous HDFS execution traces.",
+    "metrics": {
+        "normal_traces": {
+            "total_tokens": 1357352,
+            "unk_count": 0,
+            "unk_rate_percent": 0.0000,
+            "status": "PASS"
+        },
+        "anomalous_traces": {
+            "total_tokens": 1674052,
+            "unk_count": 60,
+            "unk_rate_percent": 0.0036,
+            "status": "WARN"
+        }
+    },
+    "observation": "Zero unknown tokens observed in healthy traces; 60 unknown tokens observed exclusively in anomalous traces corresponding to corrupted strings."
 }

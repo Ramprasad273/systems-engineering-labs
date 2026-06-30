@@ -437,6 +437,16 @@ Ensure `num_workers: 4` and `pin_memory: true` in your configuration to maximize
   year      = {2017},
   doi       = {10.1145/3133956.3134015}
 }
+
+@inproceedings{oliner2007supercomputers,
+  title     = {What Supercomputers Say: A Study of Five System Logs},
+  author    = {Oliner, Adam J. and Stearley, Jon},
+  booktitle = {Proceedings of the 37th Annual IEEE/IFIP International Conference on
+               Dependable Systems and Networks (DSN)},
+  pages     = {575--584},
+  year      = {2007},
+  doi       = {10.1109/DSN.2007.103}
+}
 ```
 
 ---

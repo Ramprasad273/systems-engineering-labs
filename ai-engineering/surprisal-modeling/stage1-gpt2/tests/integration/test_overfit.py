@@ -1,9 +1,7 @@
 """Integration test: overfitting sanity check.
 
-This is the first test that Karpathy recommends in "A Recipe for Training
-Neural Networks" (2019): before training at scale, verify that the model
-can memorize a tiny fixed batch. If it cannot, there is a bug in the forward
-or backward pass — not a data or hyperparameter issue.
+Before training at scale, verify that the model can memorize a tiny fixed batch.
+If it cannot, there is a bug in the forward or backward pass — not a data or hyperparameter issue.
 
 The test uses a deliberately small model and vocabulary to ensure convergence
 within 200 steps on CPU, making it suitable for CI without GPU access.

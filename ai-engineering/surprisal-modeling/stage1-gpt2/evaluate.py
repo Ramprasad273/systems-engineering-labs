@@ -1,10 +1,7 @@
 """Surprisal Threshold Calibration, Anomaly Classification, and Evaluation Telemetry.
 
-This module executes inference evaluation over validation and test holdout splits.
-Computes token-level cross-entropy loss over unmasked sequence activations (ignoring trailing
-padding delimiters), calibrates extreme value anomaly thresholds ($\tau = \mu + 3\sigma$),
-derives binary classification benchmark statistics (F1, Precision, Recall, Accuracy), and
-executes GPU resident memory footprint sweeps across sequence length horizons.
+Pedagogical explanations of why statistical boundary thresholds work, explicit tensor
+dimension annotations [batch_size, seq_len], structured telemetry, and seed reproducibility.
 """
 
 import os
@@ -13,8 +10,10 @@ import glob
 import yaml
 import math
 import json
+import random
 import argparse
 import logging
+import numpy as np
 from tqdm import tqdm
 import torch
 import torch.nn.functional as F
@@ -27,13 +26,22 @@ from src.utils.metrics import (
     sweep_vram_footprint
 )
 
-# Configure structured academic logging output
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger("surprisal.eval")
+
+
+def set_seed(seed: int):
+    """Enforces deterministic random seed setting across CPU and GPU threads for reproducibility."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    logger.info(f"Global deterministic random seed enforced: {seed}")
 
 
 def evaluate_split_perplexities(
@@ -45,21 +53,8 @@ def evaluate_split_perplexities(
 ) -> tuple[list[float], list[int], list[str]]:
     """Evaluates per-sequence perplexity over valid log tokens across a dataset split.
 
-    Computes unreduced cross-entropy loss per token, masks out trailing `<EOS>` padding
-    tokens to avoid artificial loss dilution, and averages cross-entropy over active sequence lengths.
-
-    Args:
-        model: Active PyTorch neural network module.
-        dataloader: Dataset split loader stream.
-        device: Active hardware accelerator string.
-        autocast_dtype: Target mixed-precision data type.
-        pad_token_id: Integer token identifier for `<EOS>` delimiter.
-
-    Returns:
-        Tuple containing:
-            - `perplexities`: List of computed per-sequence perplexity floating-point values.
-            - `labels`: List of ground-truth binary block anomaly labels.
-            - `block_ids`: List of HDFS block identifier provenance strings.
+    WHY: Trailing padding tokens distort mean loss. We compute unreduced token-level cross-entropy
+    and mask out padding locations so that perplexity reflects true surprisal over valid log syntax.
     """
     model.eval()
     perplexities = []
@@ -68,24 +63,22 @@ def evaluate_split_perplexities(
     
     with torch.no_grad():
         for batch in tqdm(dataloader, desc="Evaluating split", leave=False):
+            # input_ids: [batch_size, seq_len]
             input_ids = batch["input_ids"].to(device)
             batch_labels = batch.get("label", torch.zeros(len(input_ids))).cpu().tolist()
             batch_block_ids = batch.get("block_id", [""] * len(input_ids))
             
-            # Causal shifting
             inputs = input_ids[:, :-1]
             targets = input_ids[:, 1:]
             
             with torch.autocast(device_type=device, dtype=autocast_dtype):
                 logits, _ = model(inputs)
-                # Compute unreduced token-level cross entropy
+                # loss_per_token: [batch_size, seq_len - 1]
                 loss_per_token = F.cross_entropy(logits.transpose(1, 2), targets, reduction='none')
                 
-                # Mask out trailing padding blocks where both input and target match pad delimiter
                 valid_mask = ~((inputs == pad_token_id) & (targets == pad_token_id))
                 valid_counts = valid_mask.sum(dim=1).clamp(min=1)
                 
-                # Normalize sequence loss strictly over valid active log tokens
                 loss_per_seq = (loss_per_token * valid_mask.float()).sum(dim=1) / valid_counts
                 
             for seq_loss in loss_per_seq.cpu().tolist():
@@ -99,14 +92,7 @@ def evaluate_split_perplexities(
 
 
 def find_latest_checkpoint(checkpoint_dir: str) -> str | None:
-    """Discovers the most recent pre-trained model checkpoint file on disk by step index.
-
-    Args:
-        checkpoint_dir: Filesystem directory containing checkpoint_*.pt artifacts.
-
-    Returns:
-        Absolute filesystem path to the latest checkpoint, or None if directory is empty.
-    """
+    """Discovers the most recent pre-trained model checkpoint file on disk by step index."""
     if not os.path.exists(checkpoint_dir):
         return None
     pt_files = glob.glob(os.path.join(checkpoint_dir, "checkpoint_*.pt"))
@@ -125,12 +111,20 @@ def find_latest_checkpoint(checkpoint_dir: str) -> str | None:
 
 
 def main():
-    """Main execution entrypoint for surprisal threshold calibration and test split evaluation."""
     parser = argparse.ArgumentParser(description="Evaluate surprisal-gpt2 anomaly detection pipeline.")
     parser.add_argument("--config", default="config/stage1_config.yaml", help="Path to runtime configuration YAML.")
-    parser.add_argument("--checkpoint", default=None, help="Explicit path to checkpoint file. If None, auto-discovers latest.")
+    parser.add_argument("--checkpoint", default=None, help="Explicit path to checkpoint file.")
     parser.add_argument("--results", default="data/stage1_eval_results.json", help="Destination path for evaluation JSON report.")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility.")
+    parser.add_argument("--save_val_ppls", default=None, help="Optional path to save validation perplexities list as JSON.")
+    parser.add_argument("--force", action="store_true", help="Force re-evaluation even if results exist.")
     args = parser.parse_args()
+    
+    if os.path.exists(args.results) and (args.save_val_ppls is None or os.path.exists(args.save_val_ppls)) and not args.force:
+        logger.info(f"[IDEMPOTENCY] Evaluation results already exist at {args.results}. Pass --force to override.")
+        return
+
+    set_seed(args.seed)
     
     logger.info(f"Loading evaluation runtime hyperparameters from: {args.config}")
     with open(args.config, "r") as f:
@@ -144,7 +138,6 @@ def main():
     autocast_dtype = torch.bfloat16 if device == "cuda" else torch.float32
     logger.info(f"Hardware inference accelerator initialized: {device.upper()}")
     
-    # 1. Load trained model weights
     model = GPT2Model(gpt_config).to(device)
     checkpoint_path = args.checkpoint or find_latest_checkpoint(checkpoint_dir)
     
@@ -152,19 +145,23 @@ def main():
         logger.info(f"Restoring pre-trained model checkpoint from: {checkpoint_path}")
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         state_dict = ckpt.get("model_state_dict", ckpt)
-        # Strip torch.compile graph wrapper prefixes if present
         clean_state_dict = {k.replace("_orig_mod.", ""): v for k, v in state_dict.items()}
         model.load_state_dict(clean_state_dict)
     else:
         logger.warning(f"No checkpoint discovered in {checkpoint_dir}. Evaluating uninitialized baseline weights.")
         
-    # 2. Calibrate extreme value surprisal threshold over normal validation holdouts
     logger.info("Instantiating validation holdout split for threshold calibration...")
     val_dataloader, tokenizer = get_dataloader(args.config, split="val")
     
     logger.info("Computing validation perplexity distribution...")
     val_ppls, _, _ = evaluate_split_perplexities(model, val_dataloader, device, autocast_dtype=autocast_dtype)
     
+    if args.save_val_ppls and val_ppls:
+        os.makedirs(os.path.dirname(args.save_val_ppls), exist_ok=True)
+        with open(args.save_val_ppls, "w") as f:
+            json.dump(val_ppls, f, indent=4)
+        logger.info(f"Saved validation perplexities list to: {args.save_val_ppls}")
+        
     if val_ppls:
         mean_ppl_val = sum(val_ppls) / len(val_ppls)
         variance = sum((x - mean_ppl_val) ** 2 for x in val_ppls) / len(val_ppls)
@@ -172,21 +169,19 @@ def main():
     else:
         mean_ppl_val, std_ppl_val = 0.0, 0.0
         
-    # Extreme value surprisal threshold calibration: \tau = \mu + 3\sigma
+    # WHY: Setting threshold at mu + 3*sigma ensures bounds on false positives under Gaussian assumptions.
     tau = mean_ppl_val + (3 * std_ppl_val)
     logger.info("=== Threshold Calibration Summary ===")
     logger.info(f"Validation Perplexity Mean (mu)      : {mean_ppl_val:.4f}")
     logger.info(f"Validation Perplexity Std  (sigma)   : {std_ppl_val:.4f}")
     logger.info(f"Calibrated Anomaly Threshold (tau)   : {tau:.4f}")
     
-    # 3. Evaluate test split anomaly classification performance
-    logger.info("Instantiating benchmark test split (combining normal holdouts and anomaly traces)...")
+    logger.info("Instantiating benchmark test split...")
     test_dataloader, _ = get_dataloader(args.config, split="test", tokenizer=tokenizer)
     
     logger.info("Evaluating test split sequence perplexities...")
     test_ppls, test_labels, _ = evaluate_split_perplexities(model, test_dataloader, device, autocast_dtype=autocast_dtype)
     
-    # Classify sequence as anomalous if empirical perplexity exceeds calibrated threshold tau
     predictions = [1 if ppl > tau else 0 for ppl in test_ppls]
     metrics = calculate_classification_metrics(predictions, test_labels)
     
@@ -196,22 +191,15 @@ def main():
     logger.info(f"Precision                      : {metrics['precision']:.4f}")
     logger.info(f"Recall                         : {metrics['recall']:.4f}")
     logger.info(f"F1 Score                       : {metrics['f1']:.4f}")
-    logger.info(
-        f"Confusion Matrix               : TP={metrics['tp']} | FP={metrics['fp']} | "
-        f"TN={metrics['tn']} | FN={metrics['fn']}"
-    )
     
-    # 4. Benchmark hardware resident memory scalability across sequence horizons
-    logger.info("Executing VRAM resident memory scalability sweep (T=128 to 2048)...")
+    logger.info("Executing VRAM resident memory scalability sweep...")
     vram_sweep = sweep_vram_footprint(
         model, 
         device=device, 
         seq_lengths=[128, 256, 512, 1024, 2048], 
         vocab_size=gpt_config.vocab_size
     )
-    logger.info(f"Empirical VRAM Footprint Sweep Results (MB): {vram_sweep}")
     
-    # Assemble comprehensive evaluation report
     eval_report = {
         "calibration": {
             "mean_val_perplexity": mean_ppl_val,

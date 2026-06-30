@@ -1,7 +1,9 @@
-"""Model Depth Ablation Study.
+#!/usr/bin/env python3
+"""Positional Embedding Ablation Study (B2).
 
-Pedagogical docstrings explaining why depth ablations require independent
-threshold calibration, explicit shapes, structured telemetry, and idempotency.
+Pedagogical explanations of why Rotary Embeddings (RoPE) outperform learned absolute
+positional embeddings on log data (relative distance invariance), explicit tensor shapes [batch_size, seq_len],
+structured telemetry, and idempotency checks.
 """
 
 import argparse
@@ -14,6 +16,7 @@ import random
 import numpy as np
 import torch
 import yaml
+from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -23,15 +26,11 @@ from src.utils.metrics import calculate_perplexity, calculate_classification_met
 from train import get_lr, configure_optimizers
 from evaluate import evaluate_split_perplexities, set_seed
 
-logging.basicConfig(
-    format="%(asctime)s | %(levelname)-8s | %(message)s",
-    level=logging.INFO,
-    datefmt="%H:%M:%S",
-)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)-8s | %(message)s", datefmt="%H:%M:%S")
+logger = logging.getLogger("surprisal.b2")
 
-DEPTHS         = [2, 4, 12]
 ABLATION_STEPS = 800
+N_LAYER_ABLATION = 4
 WARMUP_STEPS   = 100
 MAX_LR         = 6e-4
 MIN_LR         = 6e-5
@@ -41,35 +40,33 @@ GRAD_ACCUM     = 4
 CLIP_GRAD      = 1.0
 
 
-def _count_parameters(model: GPT2Model) -> int:
-    return sum(p.numel() for p in model.parameters())
-
-
-def _run_depth_condition(
-    n_layer: int,
-    train_loader,
-    val_loader,
-    test_loader,
+def _run_pos_condition(
+    use_rotary: bool,
+    train_loader: DataLoader,
+    val_loader: DataLoader,
+    test_loader: DataLoader,
     cfg: dict,
     device: str,
     autocast_dtype: torch.dtype,
     ablation_dir: str,
 ) -> dict:
+    cond_name = "RoPE (Relative)" if use_rotary else "Learned Absolute"
     logger.info("=" * 60)
-    logger.info(f"Ablation Condition: n_layer = {n_layer}")
+    logger.info(f"Ablation Condition: Positional Embedding = {cond_name}")
     logger.info("=" * 60)
 
     model_cfg = GPT2Config(
         vocab_size=cfg["tokenizer"]["vocab_size"],
         n_embd=cfg["model"]["n_embd"],
-        n_layer=n_layer,
+        n_layer=N_LAYER_ABLATION,
         n_head=cfg["model"]["n_head"],
         block_size=cfg["dataset"]["seq_len"],
         d_ff=cfg["model"]["d_ff"],
         layer_norm_epsilon=cfg["model"]["layer_norm_epsilon"],
+        use_rotary=use_rotary
     )
     model = GPT2Model(model_cfg).to(device)
-    n_params = _count_parameters(model)
+    n_params = sum(p.numel() for p in model.parameters())
     logger.info(f"  Parameters: {n_params:,}")
 
     optimizer = configure_optimizers(model, WEIGHT_DECAY, MAX_LR, BETAS)
@@ -101,40 +98,35 @@ def _run_depth_condition(
         optimizer.step()
 
         if step > 0 and step % 50 == 0:
-            time.sleep(0.01)  # Thermal pacing to prevent GPU overheating
+            time.sleep(0.01)  # Thermal pacing
 
         if step % 500 == 0 or step == ABLATION_STEPS - 1:
-            logger.info(
-                f"  step {step:5d}/{ABLATION_STEPS} | "
-                f"loss {accum_loss/GRAD_ACCUM:.4f} | {time.time()-t0:.1f}s"
-            )
+            logger.info(f"  step {step:4d}/{ABLATION_STEPS} | loss {accum_loss/GRAD_ACCUM:.4f} | {time.time()-t0:.1f}s")
 
-    # WHY: Each depth model has a drastically different baseline perplexity scale.
-    # Applying a shared threshold from a 12-layer model marks 100% of sequences as anomalous for 2-layer models.
-    # Independent threshold calibration per architecture is mandatory.
+    # WHY: RoPE encodes relative token offset, allowing generalization across varied sequence offsets.
     val_ppls, _, _ = evaluate_split_perplexities(model, val_loader, device, autocast_dtype=autocast_dtype)
-    mu  = sum(val_ppls) / len(val_ppls)
+    mu  = sum(val_ppls) / max(1, len(val_ppls))
     sig = (sum((p - mu) ** 2 for p in val_ppls) / max(1, len(val_ppls) - 1)) ** 0.5
     tau = mu + 3 * sig
-    val_ppl = mu
-    logger.info(f"  Per-Model Calibration: μ={mu:.4f}  σ={sig:.4f}  τ={tau:.4f}")
+    logger.info(f"  Calibration: μ={mu:.4f}  σ={sig:.4f}  τ={tau:.4f}")
 
     test_ppls, test_labels, _ = evaluate_split_perplexities(model, test_loader, device, autocast_dtype=autocast_dtype)
     preds = [1 if ppl > tau else 0 for ppl in test_ppls]
     m = calculate_classification_metrics(preds, test_labels)
     logger.info(f"  F1={m['f1']:.4f}  P={m['precision']:.4f}  R={m['recall']:.4f}")
 
-    ckpt_path = os.path.join(ablation_dir, f"ckpt_depth_{n_layer}.pt")
-    torch.save({"model_state_dict": model.state_dict(), "config": model_cfg.__dict__}, ckpt_path)
+    ckpt_name = "ckpt_pos_rope.pt" if use_rotary else "ckpt_pos_absolute.pt"
+    torch.save({"model_state_dict": model.state_dict(), "config": model_cfg.__dict__}, os.path.join(ablation_dir, ckpt_name))
 
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-    time.sleep(3.0)  # Cooldown between runs
+    time.sleep(3.0)  # Thermal cooldown
 
     return {
-        "n_layer": n_layer,
+        "condition": cond_name,
+        "use_rotary": use_rotary,
         "n_params": n_params,
-        "val_perplexity": val_ppl,
+        "val_perplexity": mu,
         "threshold_tau": tau,
         "f1": m["f1"],
         "precision": m["precision"],
@@ -145,9 +137,9 @@ def _run_depth_condition(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Model depth ablation study")
+    parser = argparse.ArgumentParser(description="Positional embedding ablation study")
     parser.add_argument("--config", default="config/stage1_config.yaml")
-    parser.add_argument("--output", default="data/ablations/ablation_depth.json")
+    parser.add_argument("--output", default="data/ablations/ablation_pos.json")
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
     parser.add_argument("--force", action="store_true", help="Force retraining.")
     args = parser.parse_args()
@@ -156,14 +148,13 @@ def main():
         try:
             with open(args.output, "r") as f:
                 existing_data = json.load(f)
-            if len(existing_data) == len(DEPTHS):
-                logger.info(f"[IDEMPOTENCY] Depth ablation results already exist at {args.output}. Pass --force to override.")
+            if len(existing_data) == 2:
+                logger.info(f"[IDEMPOTENCY] B2 positional ablation results already exist at {args.output}. Pass --force to override.")
                 return
         except Exception:
             pass
 
     set_seed(args.seed)
-
     with open(args.config, "r") as f:
         cfg = yaml.safe_load(f)
 
@@ -172,43 +163,18 @@ def main():
     ablation_dir = os.path.dirname(args.output)
     os.makedirs(ablation_dir, exist_ok=True)
 
-    logger.info(f"Device: {device}")
-    logger.info(f"Ablation conditions: n_layer ∈ {DEPTHS}")
-
     train_loader, tokenizer = get_dataloader(args.config, split="train")
     val_loader, _   = get_dataloader(args.config, split="val",   tokenizer=tokenizer)
     test_loader, _  = get_dataloader(args.config, split="test",  tokenizer=tokenizer)
 
-    results = []
-    for depth in DEPTHS:
-        result = _run_depth_condition(
-            n_layer=depth,
-            train_loader=train_loader,
-            val_loader=val_loader,
-            test_loader=test_loader,
-            cfg=cfg,
-            device=device,
-            autocast_dtype=autocast_dtype,
-            ablation_dir=ablation_dir,
-        )
-        results.append(result)
+    results = [
+        _run_pos_condition(True, train_loader, val_loader, test_loader, cfg, device, autocast_dtype, ablation_dir),
+        _run_pos_condition(False, train_loader, val_loader, test_loader, cfg, device, autocast_dtype, ablation_dir)
+    ]
 
     with open(args.output, "w") as f:
         json.dump(results, f, indent=2)
-
-    print("\n" + "=" * 72)
-    print("ABLATION: Model Depth vs. Performance")
-    print("=" * 72)
-    print(f"{'L':>4}  {'Params':>12}  {'Val PPL':>9}  {'τ':>8}  {'F1':>7}  {'Prec':>7}  {'Recall':>7}")
-    print("-" * 72)
-    for r in results:
-        print(
-            f"{r['n_layer']:>4}  {r['n_params']:>12,}  {r['val_perplexity']:>9.4f}  "
-            f"{r['threshold_tau']:>8.4f}  {r['f1']:>7.4f}  "
-            f"{r['precision']:>7.4f}  {r['recall']:>7.4f}"
-        )
-    print("=" * 72)
-    print(f"\nResults written to: {args.output}")
+    logger.info(f"Results written to {args.output}")
 
 
 if __name__ == "__main__":

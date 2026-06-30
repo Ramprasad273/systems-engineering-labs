@@ -1,0 +1,32 @@
+[
+  {
+    "condition": "SwiGLU (Gated)",
+    "use_swiglu": true,
+    "n_params": 32158464,
+    "val_perplexity": 13371686200.220623,
+    "threshold_tau": 16449955328.006811,
+    "f1": 0.001769911504424779,
+    "precision": 0.13392857142857142,
+    "recall": 0.0008908421427723008,
+    "accuracy": 0.7671378043241904,
+    "tp": 15,
+    "fp": 97,
+    "tn": 55726,
+    "fn": 16823
+  },
+  {
+    "condition": "GELU (Standard)",
+    "use_swiglu": false,
+    "n_params": 25867008,
+    "val_perplexity": 22819316858.27083,
+    "threshold_tau": 27452571889.903805,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "accuracy": 0.7679635567911259,
+    "tp": 0,
+    "fp": 22,
+    "tn": 55801,
+    "fn": 16838
+  }
+]

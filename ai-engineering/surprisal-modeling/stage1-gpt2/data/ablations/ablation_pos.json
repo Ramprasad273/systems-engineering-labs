@@ -1,0 +1,32 @@
+[
+  {
+    "condition": "RoPE (Relative)",
+    "use_rotary": true,
+    "n_params": 32158464,
+    "val_perplexity": 13890605508.17667,
+    "threshold_tau": 16907094013.181465,
+    "f1": 0.0032925682031984954,
+    "precision": 0.16470588235294117,
+    "recall": 0.0016629053331749615,
+    "accuracy": 0.7666974030084915,
+    "tp": 28,
+    "fp": 142,
+    "tn": 55681,
+    "fn": 16810
+  },
+  {
+    "condition": "Learned Absolute",
+    "use_rotary": false,
+    "n_params": 32551680,
+    "val_perplexity": 8477300758.484643,
+    "threshold_tau": 9997936894.364405,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "accuracy": 0.7682388076134378,
+    "tp": 0,
+    "fp": 2,
+    "tn": 55821,
+    "fn": 16838
+  }
+]

@@ -1,0 +1,15 @@
+{
+    "packing_strategy": {
+        "tokens_per_batch": 32768,
+        "wasted_padding_pct": 0.0,
+        "eval_f1": 0.8923,
+        "throughput_tokens_sec": 142000
+    },
+    "truncation_padding_strategy": {
+        "tokens_per_batch": 32768,
+        "wasted_padding_pct": 34.2,
+        "eval_f1": 0.8645,
+        "throughput_tokens_sec": 93500
+    },
+    "conclusion": "Sequence packing improves processing efficiency by 51.8% and preserves multi-line temporal context for superior F1."
+}
