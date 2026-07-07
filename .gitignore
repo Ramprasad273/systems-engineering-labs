@@ -55,7 +55,13 @@ torch_compile_debug/
 # ── 4. Large Data Files & Logs ────────────────────────────────────────────────
 *.log
 *.log.*
+*.log.txt
+log*.txt
+logx.txt
 logs/
+hf_cache/
+data/hf_cache/
+data/sft_dataset/
 *.parquet
 *.feather
 *.tfrecords
@@ -98,3 +104,7 @@ Desktop.ini
 .antigravityignore
 brain/
 scratch/
+
+# ── 8. Agent Implementation Plans & Transient Docs ────────────────────────────
+*implementation_plan*.md
+implementation_plan.md

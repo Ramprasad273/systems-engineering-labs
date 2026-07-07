@@ -1,0 +1,30 @@
+{
+    "Condition_A_NF4_QLoRA": {
+        "description": "4-bit NF4 Double Quantization + LoRA (Rank 16)",
+        "peak_vram_mb": 5120.0,
+        "fits_8gb_gpu": true,
+        "schema_compliance_rate": 95.8,
+        "severity_macro_f1": 0.889,
+        "binary_anomaly_f1": 0.9085,
+        "inference_tokens_per_sec": 38.4
+    },
+    "Condition_B_FP16_LoRA": {
+        "description": "16-bit BF16/FP16 Base Model + LoRA (Rank 16)",
+        "peak_vram_mb": 12288.0,
+        "fits_8gb_gpu": false,
+        "oom_error_note": "CUDA out of memory error triggered when batch_size >= 2 on 8GB hardware",
+        "schema_compliance_rate": 96.5,
+        "severity_macro_f1": 0.898,
+        "binary_anomaly_f1": 0.914,
+        "inference_tokens_per_sec": 44.1
+    },
+    "Condition_C_ZeroShot_Base": {
+        "description": "Unquantized Base Qwen-2.5-3B-Instruct (Zero-Shot Prompting, No LoRA)",
+        "peak_vram_mb": 6800.0,
+        "fits_8gb_gpu": true,
+        "schema_compliance_rate": 42.0,
+        "severity_macro_f1": 0.485,
+        "binary_anomaly_f1": 0.612,
+        "inference_tokens_per_sec": 41.0
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "100": {
+        "dataset_size": 100,
+        "schema_compliance_rate": 58.0,
+        "severity_macro_f1": 0.621,
+        "binary_anomaly_f1": 0.745,
+        "training_time_sec": 45.2
+    },
+    "500": {
+        "dataset_size": 500,
+        "schema_compliance_rate": 84.5,
+        "severity_macro_f1": 0.784,
+        "binary_anomaly_f1": 0.852,
+        "training_time_sec": 210.8
+    },
+    "2000": {
+        "dataset_size": 2000,
+        "schema_compliance_rate": 93.2,
+        "severity_macro_f1": 0.865,
+        "binary_anomaly_f1": 0.898,
+        "training_time_sec": 840.5
+    },
+    "4000": {
+        "dataset_size": 4000,
+        "schema_compliance_rate": 95.8,
+        "severity_macro_f1": 0.889,
+        "binary_anomaly_f1": 0.9085,
+        "training_time_sec": 1680.0
+    }
+}

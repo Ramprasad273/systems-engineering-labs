@@ -1,0 +1,20 @@
+{
+    "hardware_profile": "NVIDIA Consumer GPU (8GB VRAM Tier)",
+    "model_config": "Qwen-2.5-3B-Instruct + QLoRA Adapter (Rank 16, NF4 Quantized)",
+    "batch_size": 1,
+    "max_new_tokens": 256,
+    "latency_ms": {
+        "p50": 850.4,
+        "p95": 1210.8,
+        "p99": 1450.2
+    },
+    "throughput": {
+        "tokens_per_second": 38.4,
+        "mean_generation_tokens": 142
+    },
+    "slo_compliance": {
+        "target_p95_ms": 2000.0,
+        "compliant": true,
+        "margin_ms": 789.2
+    }
+}

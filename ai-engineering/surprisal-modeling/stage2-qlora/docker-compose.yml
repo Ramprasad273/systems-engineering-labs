@@ -1,0 +1,49 @@
+services:
+  surprisal-qlora-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: surprisal-qlora-container
+    ipc: host
+    shm_size: '8gb'
+    volumes:
+      # Map volume mounts as specified: ./data/ to /workspace/data/
+      - ./data:/workspace/data
+      # Map current project directory to workspace for active development
+      - .:/workspace
+      # Map stage1 directory as read-only so stage1 eval results and raw logs can be read seamlessly
+      - ../stage1-gpt2:/stage1-gpt2:ro
+      # Persist HuggingFace cache to host so models are never re-downloaded across container runs
+      - ./data/hf_cache:/root/.cache/huggingface
+      # --- WSL2 GPU Driver Fix ---
+      # Mount the WSL2 host driver library directories so the container can
+      # resolve CUDA symbols that live outside the standard /usr/lib/wsl/lib path.
+      # This is required for NVIDIA driver >= 560 on Windows/WSL2 Docker Desktop.
+      - /usr/lib/wsl:/usr/lib/wsl:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - OMP_NUM_THREADS=4
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - PYTHONPATH=/workspace
+      - HF_HOME=/workspace/data/hf_cache
+      - HUGGINGFACE_HUB_CACHE=/workspace/data/hf_cache
+      - TRANSFORMERS_CACHE=/workspace/data/hf_cache
+      # WHY CUDA_LAUNCH_BLOCKING=0:
+      # Previously set to 1 as a workaround for WSL2 WDDM driver timeouts (CUDA_ERROR_NOT_READY)
+      # caused by multi-tensor AdamW (foreach=True) and float32 vocabulary head casting.
+      # Since finetune.py uses foreach=False/fused=False and preserves native bfloat16 head,
+      # setting CUDA_LAUNCH_BLOCKING=1 is completely redundant and forces CPU-GPU synchronization
+      # on every single layer, choking GPU utilization to ~30% and inflating ETA to 6+ hours.
+      # Setting CUDA_LAUNCH_BLOCKING=0 enables asynchronous GPU kernel execution and ~100% GPU saturation.
+      - CUDA_LAUNCH_BLOCKING=0
+      - TOKENIZERS_PARALLELISM=false
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

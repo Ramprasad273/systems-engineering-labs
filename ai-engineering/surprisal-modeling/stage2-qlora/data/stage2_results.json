@@ -1,0 +1,165 @@
+{
+    "multi_seed_averages": {
+        "schema_compliance_rate": 100.0,
+        "severity_macro_f1": 0.0,
+        "binary_anomaly_metrics": {
+            "accuracy": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+        },
+        "latency_p95_ms": 3865.44
+    },
+    "per_seed_results": {
+        "seed_42": {
+            "total_samples": 81,
+            "schema_compliance_rate": 100.0,
+            "severity_metrics": {
+                "accuracy": 0.0,
+                "macro_f1": 0.0,
+                "per_class": {
+                    "P0_EMERGENCY": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P1_CRITICAL": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 81
+                    },
+                    "P2_WARNING": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P3_INFO": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    }
+                }
+            },
+            "binary_anomaly_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "tp": 81,
+                "fp": 0,
+                "tn": 0,
+                "fn": 0
+            },
+            "latency_ms": {
+                "p50": 3542.65,
+                "p95": 4111.2,
+                "p99": 4488.94
+            },
+            "peak_vram_mb": 2289.57
+        },
+        "seed_123": {
+            "total_samples": 81,
+            "schema_compliance_rate": 100.0,
+            "severity_metrics": {
+                "accuracy": 0.0,
+                "macro_f1": 0.0,
+                "per_class": {
+                    "P0_EMERGENCY": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P1_CRITICAL": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 81
+                    },
+                    "P2_WARNING": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P3_INFO": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    }
+                }
+            },
+            "binary_anomaly_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "tp": 81,
+                "fp": 0,
+                "tn": 0,
+                "fn": 0
+            },
+            "latency_ms": {
+                "p50": 3505.73,
+                "p95": 3589.24,
+                "p99": 4231.77
+            },
+            "peak_vram_mb": 2289.57
+        },
+        "seed_999": {
+            "total_samples": 81,
+            "schema_compliance_rate": 100.0,
+            "severity_metrics": {
+                "accuracy": 0.0,
+                "macro_f1": 0.0,
+                "per_class": {
+                    "P0_EMERGENCY": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P1_CRITICAL": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 81
+                    },
+                    "P2_WARNING": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    },
+                    "P3_INFO": {
+                        "precision": 0.0,
+                        "recall": 0.0,
+                        "f1": 0.0,
+                        "support": 0
+                    }
+                }
+            },
+            "binary_anomaly_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "tp": 81,
+                "fp": 0,
+                "tn": 0,
+                "fn": 0
+            },
+            "latency_ms": {
+                "p50": 3499.63,
+                "p95": 3895.89,
+                "p99": 4239.28
+            },
+            "peak_vram_mb": 2289.57
+        }
+    }
+}

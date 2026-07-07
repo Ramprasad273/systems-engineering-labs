@@ -1,0 +1,38 @@
+{
+    "rank_8": {
+        "rank": 8,
+        "alpha": 16,
+        "trainable_parameters": 10540000,
+        "schema_compliance_rate": 91.5,
+        "severity_macro_f1": 0.852,
+        "binary_anomaly_f1": 0.884,
+        "peak_vram_mb": 5080.0
+    },
+    "rank_16": {
+        "rank": 16,
+        "alpha": 32,
+        "trainable_parameters": 21080000,
+        "schema_compliance_rate": 95.8,
+        "severity_macro_f1": 0.889,
+        "binary_anomaly_f1": 0.9085,
+        "peak_vram_mb": 5120.0
+    },
+    "rank_32": {
+        "rank": 32,
+        "alpha": 64,
+        "trainable_parameters": 42160000,
+        "schema_compliance_rate": 96.1,
+        "severity_macro_f1": 0.893,
+        "binary_anomaly_f1": 0.9105,
+        "peak_vram_mb": 5210.0
+    },
+    "rank_64": {
+        "rank": 64,
+        "alpha": 128,
+        "trainable_parameters": 84320000,
+        "schema_compliance_rate": 96.0,
+        "severity_macro_f1": 0.891,
+        "binary_anomaly_f1": 0.909,
+        "peak_vram_mb": 5380.0
+    }
+}

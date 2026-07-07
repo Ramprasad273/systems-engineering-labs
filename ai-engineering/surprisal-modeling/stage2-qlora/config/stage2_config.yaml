@@ -1,0 +1,58 @@
+base_model:
+  name: "Qwen/Qwen2.5-3B-Instruct"
+  revision: "main"
+  trust_remote_code: true
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_use_double_quant: true   # WHY: double quant saves ~0.4 bits/param additional memory
+
+lora:
+  rank: 16                    # r in ΔW = BA; 16 is the empirical sweet spot
+  alpha: 32                   # scaling = alpha/rank = 2.0 (ΔW is doubled in magnitude)
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+
+dataset:
+  raw_log_path: "../stage1-gpt2/data/raw/HDFS.log"
+  anomaly_label_path: "../stage1-gpt2/data/raw/anomaly_label.csv"
+  stage1_results_path: "../stage1-gpt2/data/stage1_eval_results.json"
+  sft_dir: "data/sft_dataset"
+  train_file: "train.jsonl"
+  val_file: "val.jsonl"
+  test_file: "test.jsonl"
+  spot_check_file: "spot_check_50.jsonl"
+  max_seq_len: 512            # Reduced from 1024: without gradient checkpointing, 512 tokens per sample fits in 8GB VRAM at bs=1 with NF4 double-quant
+  context_lines: 8            # Lines of log text included per block in user prompt (reduced to 8 to fit BPE tokenized IP addresses within 512 tokens)
+
+training:
+  max_lr: 2.0e-4              # WHY: Smaller LR than pre-training (3B model already converged)
+  min_lr: 2.0e-5
+  warmup_steps: 100
+  max_steps: 500              # WHY: Reduced from 2000 to 500 (2 full epochs at bs=16); prevents overfitting and cuts GPU runtime by 75%
+  micro_batch_size: 1         # bs=1 without gradient checkpointing: fits 3B NF4 model in 8GB VRAM cleanly
+  gradient_accumulation_steps: 16  # Effective batch = 1 * 16 = 16 (same effective batch as before)
+  weight_decay: 0.01
+  gradient_clipping: 1.0
+  step_sleep_sec: 0.20        # WHY: Increased to 0.20s to provide thermal relief after each optimizer step and prevent GPU reaching 84°C
+  checkpoint_interval: 100    # WHY: Reduced from 500 to 100 so progress is frequently saved (saving ~21MB LoRA checkpoint takes <0.1s)
+  checkpoint_dir: "data/checkpoints"
+  results_path: "data/stage2_results.json"
+  comparison_path: "data/stage1_vs_stage2_comparison.json"
+
+evaluation:
+  seeds: [42, 123, 999]
+  max_new_tokens: 256
+  temperature: 0.1            # Near-greedy for structured JSON output
+  do_sample: false
+  eval_sleep_sec: 0.02        # WHY: Thermal relief micro-sleep between evaluation samples to prevent GPU heat buildup

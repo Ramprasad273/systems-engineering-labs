@@ -1,0 +1,41 @@
+{
+    "architecture_comparison": {
+        "stage1": "GPT-2 Unsupervised Surprisal (124M parameters)",
+        "stage2": "Qwen-2.5-3B-Instruct QLoRA Fine-Tuned (3.09B parameters, 21M trainable adapter)"
+    },
+    "anomaly_detection_performance": {
+        "accuracy": {
+            "stage1_gpt2": 0.9527669588912897,
+            "stage2_qlora": 1.0,
+            "delta": 0.047233041108710294
+        },
+        "precision": {
+            "stage1_gpt2": 0.9463310693834066,
+            "stage2_qlora": 1.0,
+            "delta": 0.05366893061659339
+        },
+        "recall": {
+            "stage1_gpt2": 0.8440432355386626,
+            "stage2_qlora": 1.0,
+            "delta": 0.15595676446133744
+        },
+        "f1_score": {
+            "stage1_gpt2": 0.8922651933701657,
+            "stage2_qlora": 1.0,
+            "delta": 0.10773480662983426
+        }
+    },
+    "structured_diagnostic_capabilities": {
+        "stage1_gpt2": "None (unsupervised sequence surprisal scalar only)",
+        "stage2_qlora": {
+            "json_schema_compliance_rate": 100.0,
+            "severity_classification_macro_f1": 0.0,
+            "latency_p95_ms": 0.0
+        }
+    },
+    "vram_footprint_mb": {
+        "stage1_gpt2_fp16": 1616.49,
+        "stage2_qlora_nf4_bs2": 5120.0,
+        "stage2_fp16_unquantized": 12288.0
+    }
+}
