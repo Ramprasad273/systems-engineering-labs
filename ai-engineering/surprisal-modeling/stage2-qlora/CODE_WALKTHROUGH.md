@@ -4,7 +4,7 @@ This document provides a comprehensive systems architecture and code walkthrough
 
 ---
 
-## 1. Pedagogical LoRA Mathematics (`src/models/lora.py`)
+## 1. LoRA Mathematics (`src/models/lora.py`)
 
 When fine-tuning a 3.09-billion-parameter language model on specialized operational telemetry, updating all parameters risks **catastrophic forgetting**—overwriting foundational syntactic and reasoning capabilities learned during pretraining. To prevent this while fitting within consumer hardware budgets, we implement Low-Rank Adaptation (LoRA) directly from first principles.
 

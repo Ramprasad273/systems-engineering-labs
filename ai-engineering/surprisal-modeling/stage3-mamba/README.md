@@ -6,7 +6,7 @@
 
 **Stage 3** of the **Neural Lambda Architecture** constructs the **"Speed Layer"** for high-throughput, low-latency HDFS anomaly detection using **Structured State Space Models (Mamba S6)** and **Interleaved Hybrid MambaLog**.
 
-- **Zero Magic / First Principles**: Continuous-to-discrete Zero-Order Hold (ZOH) discretization derived explicitly in pure PyTorch alongside hardware-fused CUDA kernel wrappers (`selective_scan_fn`).
+- **Continuous-to-discrete ZOH Discretization**: Derived explicitly in pure PyTorch alongside hardware-fused CUDA kernel wrappers (`selective_scan_fn`).
 - **Strict Scientific Parity**: Identical parameter capacity (`~125M`), tokenization (`log_tokenizer.json`), pre-packed sequence binning (`512` tokens), and optimizer settings (`AdamW` with strict 2D vs 1D weight decay separation) as Stage 1 GPT-2.
 - **Flat O(1) Memory Recurrence**: Eliminates the O(T^2) quadratic attention memory wall, achieving **~3.4x higher real-time log throughput (`8.42 ms/log`)** while maintaining **statistical anomaly F1 parity (`0.965 to 0.968`)**.
 
@@ -38,7 +38,7 @@ While Mamba S6 excels at local syntax processing and high-speed compression, exa
 
 ## Universal 3-Stage Comparison & Hardware Parity (`RTX 3060 Ti 8GB VRAM`)
 
-To enable seamless cross-stage evaluation on exact hardware parity (`NVIDIA RTX 3060 Ti 8 GB VRAM`), our configuration applies `batch_size: 4` with `gradient_accumulation_steps: 16` (`effective_batch_size: 64`), keeping peak memory allocation under `2.0 GB` for Stage 3 while matching Stage 1 statistical convergence exact parity.
+To enable direct cross-stage evaluation on exact hardware parity (`NVIDIA RTX 3060 Ti 8 GB VRAM`), our configuration applies `batch_size: 4` with `gradient_accumulation_steps: 16` (`effective_batch_size: 64`), keeping peak memory allocation under `2.0 GB` for Stage 3 while matching Stage 1 statistical convergence exact parity.
 
 | Architectural Dimension | Stage 1: GPT-2 Baseline | Stage 2: Qwen-2.5-3B QLoRA | Stage 3: Mamba S6 Block | Stage 3: Hybrid MambaLog |
 | :--- | :---: | :---: | :---: | :---: |
@@ -86,7 +86,7 @@ stage3-mamba/
 │   ├── benchmark_vram_sweep.py     # Suite 1: Context sweep (L=128..8192) proving O(1) vs O(T^2)
 │   ├── benchmark_throughput.py     # Suite 3: Latency (`ms/log`), logs/sec, and power profiler
 │   ├── analyze_stage3_results.py   # Synthesizes comparative markdown and CSV tables
-│   └── generate_blog_figures.py    # Generates viral Feynman blog charts (`results/*.png`)
+│   └── generate_blog_figures.py    # Generates publication charts (`results/*.png`)
 ├── tests/
 │   ├── __init__.py
 │   └── test_mamba_shapes.py        # Comprehensive unit verification suite (pytest)

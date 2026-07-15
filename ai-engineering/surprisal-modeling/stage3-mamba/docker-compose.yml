@@ -10,11 +10,11 @@ services:
     volumes:
       # Map current stage 3 project directory to /workspace/stage3-mamba
       - .:/workspace/stage3-mamba
-      # Map stage1 directory as read-only so Stage 1 pre-packed tensors and tokenizer can be inherited seamlessly (`../stage1-gpt2`)
+      # Map stage1 directory as read-only so Stage 1 pre-packed tensors and tokenizer can be inherited directly (`../stage1-gpt2`)
       - ../stage1-gpt2:/workspace/stage1-gpt2:ro
       # Map stage2 directory as read-only for unified cross-stage comparative telemetry (`../stage2-qlora`)
       - ../stage2-qlora:/workspace/stage2-qlora:ro
-      # --- WSL2 GPU Driver Fix ---
+      # WSL2 GPU Driver Fix
       # Mount the WSL2 host driver library directories so the container can
       # resolve CUDA symbols that live outside the standard /usr/lib/wsl/lib path.
       # This is required for NVIDIA driver >= 560 on Windows/WSL2 Docker Desktop.

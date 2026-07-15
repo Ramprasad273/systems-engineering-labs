@@ -164,17 +164,17 @@ def generate_universal_comparison(
             row_str = " | ".join([f"**{r[k]}**" if k in ["Stage", "Anomaly F1-Score", "Peak VRAM (3060 Ti)"] else f"`{r[k]}`" for k in headers])
             f.write(f"| {row_str} |\n")
 
-        f.write("\n## 🔬 Why This Fits Perfectly on an RTX 3060 Ti (8 GB VRAM)\n\n")
+        f.write("\n## Why This Fits Perfectly on an RTX 3060 Ti (8 GB VRAM)\n\n")
         f.write("1. **Stage 1 (GPT-2 Baseline)**: Requires `1.61 GB` VRAM for normal sequence lengths (`L=512`), but crashes with `CUDA Out of Memory (OOM)` on the 3060 Ti whenever sequence horizons reach $4,096+$ tokens due to quadratic attention ($O(T^2)$).\n")
         f.write("2. **Stage 2 (Qwen-2.5-3B QLoRA)**: Uses **4-bit NF4 quantization (`bitsandbytes`)** plus Low-Rank Adaptation (`LoRA r=16`), compressing a 3.09-billion parameter LLM down to **`5.12 GB VRAM`**. This leaves nearly 3 GB of breathing room on your 8 GB card for activation buffers and JSON generation.\n")
         f.write("3. **Stage 3 (Mamba S6 & MambaLog)**: Operates with **flat $O(1)$ recurrent step buffers (`conv_state + ssm_state`)**, requiring only **`1.64 GB – 1.89 GB VRAM`** during inference (`batch_size=4, grad_accum=16`). It NEVER hits an OOM wall even at 8,192+ tokens, while accelerating real-time log ingestion by **3.4x (`8.42 ms/log`)** and boosting anomaly detection F1 to a state-of-the-art **`0.9681`**.\n")
         
-        f.write("\n## 🔄 The Complete Production Workflow (Tri-Layer Synergy)\n\n")
+        f.write("\n## The Complete Production Workflow (Tri-Layer Synergy)\n\n")
         f.write("```mermaid\n")
         f.write("graph TD\n")
         f.write("    A[Raw HDFS Log Stream / Firehose] --> B[Stage 3: MambaLog Speed Layer<br>O 1 Memory | 8.4 ms/log | 1.89 GB VRAM]\n")
-        f.write("    B -- Normal / Healthy Block 95% --> C[Log Archive / Zero Alert Cost]\n")
-        f.write("    B -- Anomaly Flagged F1: 0.968 5% --> D[Stage 2: Qwen-2.5-3B QLoRA Diagnostic Layer<br>4-bit NF4 | 1.2s Latency | 5.12 GB VRAM]\n")
+        f.write("    B -->|Normal / Healthy Block 95%| C[Log Archive / Zero Alert Cost]\n")
+        f.write("    B -->|Anomaly Flagged F1: 0.968 5%| D[Stage 2: Qwen-2.5-3B QLoRA Diagnostic Layer<br>4-bit NF4 | 1.2s Latency | 5.12 GB VRAM]\n")
         f.write("    D --> E[Structured JSON Root-Cause Diagnosis<br>+ Actionable CLI SRE Mitigation Commands]\n")
         f.write("```\n")
 

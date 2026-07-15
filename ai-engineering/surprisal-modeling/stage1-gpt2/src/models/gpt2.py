@@ -1,6 +1,6 @@
 """Custom Lightweight GPT-2 Autoregressive Transformer Architecture.
 
-Pedagogical explanations of architectural departures (RoPE vs absolute pos embeddings,
+Details architectural departures (RoPE vs absolute pos embeddings,
 SwiGLU vs GELU, RMSNorm vs LayerNorm), explicit tensor shape annotations [batch_size, seq_len, dim],
 and academic weight initialization.
 """

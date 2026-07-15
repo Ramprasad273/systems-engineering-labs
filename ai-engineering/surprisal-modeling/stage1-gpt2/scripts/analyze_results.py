@@ -172,7 +172,7 @@ def _print_token_stability(data: dict):
     for split in ["normal", "anomaly"]:
         d = data.get(split, {})
         unk_pct = d.get("unk_rate", 0) * 100
-        status  = "✓ PASS" if d.get("total_unk", 0) == 0 else "⚠ WARN"
+        status  = "[PASS]" if d.get("total_unk", 0) == 0 else "[WARN]"
         print(f"\n  {split.upper():10}  {status}  |  "
               f"tokens={d.get('total_tokens',0):,}  "
               f"UNK={d.get('total_unk',0)}  "
@@ -205,36 +205,36 @@ def main():
     if eval_results:
         _print_main_results(eval_results)
     else:
-        print("\n[Eval results not found — run evaluate.py first]")
+        print("\n[Eval results not found - run evaluate.py first]")
 
     if training_log:
         _print_training_curve(training_log)
     else:
-        print("\n[Training log not found — run train.py first]")
+        print("\n[Training log not found - run train.py first]")
 
     if vocab_data:
         _print_vocab_ablation(vocab_data)
     else:
         print(_banner("ABLATION: Vocabulary Size"))
-        print("\n  [Not yet run — execute: python scripts/ablation_vocab.py]")
+        print("\n  [Not yet run - execute: python scripts/ablation_vocab.py]")
 
     if depth_data:
         _print_depth_ablation(depth_data)
     else:
         print(_banner("ABLATION: Model Depth"))
-        print("\n  [Not yet run — execute: python scripts/ablation_depth.py]")
+        print("\n  [Not yet run - execute: python scripts/ablation_depth.py]")
 
     if threshold_data:
         _print_threshold_sensitivity(threshold_data)
     else:
         print(_banner("ABLATION: Threshold Sensitivity"))
-        print("\n  [Not yet run — execute: python scripts/threshold_sensitivity.py]")
+        print("\n  [Not yet run - execute: python scripts/threshold_sensitivity.py]")
 
     if token_data:
         _print_token_stability(token_data)
     else:
         print(_banner("TOKEN STABILITY ANALYSIS"))
-        print("\n  [Not yet run — execute: python scripts/token_stability_check.py]")
+        print("\n  [Not yet run - execute: python scripts/token_stability_check.py]")
 
     print(f"\n{'═' * 70}")
     print("Run 'python scripts/analyze_results.py' after all experiments complete")

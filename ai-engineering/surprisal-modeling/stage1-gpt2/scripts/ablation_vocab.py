@@ -1,6 +1,6 @@
 """Vocabulary Size Ablation Study.
 
-Pedagogical explanations of vocabulary fragmentation vs token fertility,
+Details vocabulary fragmentation vs token fertility,
 explicit tensor dimension annotations [batch_size, seq_len], structured telemetry, and seed reproducibility.
 """
 

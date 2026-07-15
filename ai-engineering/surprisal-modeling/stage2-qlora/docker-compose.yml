@@ -11,11 +11,11 @@ services:
       - ./data:/workspace/data
       # Map current project directory to workspace for active development
       - .:/workspace
-      # Map stage1 directory as read-only so stage1 eval results and raw logs can be read seamlessly
+      # Map stage1 directory as read-only so stage1 eval results and raw logs can be read directly
       - ../stage1-gpt2:/stage1-gpt2:ro
       # Persist HuggingFace cache to host so models are never re-downloaded across container runs
       - ./data/hf_cache:/root/.cache/huggingface
-      # --- WSL2 GPU Driver Fix ---
+      # WSL2 GPU Driver Fix
       # Mount the WSL2 host driver library directories so the container can
       # resolve CUDA symbols that live outside the standard /usr/lib/wsl/lib path.
       # This is required for NVIDIA driver >= 560 on Windows/WSL2 Docker Desktop.

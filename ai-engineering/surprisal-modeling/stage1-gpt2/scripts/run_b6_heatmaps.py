@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Surprisal Heatmaps Generation (B6).
 
-Pedagogical explanations of why token-level surprisal pinpoints error localization,
+Details why token-level surprisal pinpoints error localization,
 explicit tensor shapes [1, seq_len], and idempotency checks.
 """
 

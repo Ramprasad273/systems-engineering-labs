@@ -16,7 +16,7 @@ echo "=== Compiling Research Comparison Tables ==="
 python3 scripts/analyze_stage3_results.py
 
 echo ""
-echo "=== Generating Feynman Publication Figures ==="
+echo "=== Generating Publication Figures ==="
 python3 scripts/generate_blog_figures.py
 
 echo ""

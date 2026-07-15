@@ -1,6 +1,6 @@
 """
 Unit tests for core mathematical properties and anti-regression calibration.
-Explicit shapes, pedagogical docstrings explaining why, and structured telemetry.
+Explicit shapes, detailed docstrings, and structured telemetry.
 """
 import logging
 import numpy as np

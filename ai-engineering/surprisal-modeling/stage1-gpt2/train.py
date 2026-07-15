@@ -1,6 +1,6 @@
 """Autoregressive Pre-training Pipeline for Unsupervised Surprisal Log Anomaly Modeling.
 
-Pedagogical explanations of architectural choices, explicit tensor dimension
+Details architectural choices, explicit tensor dimension
 annotations [batch_size, seq_len, dim], structured telemetry, and robust fault-tolerant smart checkpointing.
 """
 

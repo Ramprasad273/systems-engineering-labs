@@ -1,6 +1,6 @@
 """Surprisal Threshold Calibration, Anomaly Classification, and Evaluation Telemetry.
 
-Pedagogical explanations of why statistical boundary thresholds work, explicit tensor
+Details why statistical boundary thresholds work, explicit tensor
 dimension annotations [batch_size, seq_len], structured telemetry, and seed reproducibility.
 """
 

@@ -1,7 +1,7 @@
 """Low-Rank Adaptation (LoRA) Implementation from First Principles.
 
 Implements explicit low-rank matrix decomposition (ΔW = BA) without external wrapping libraries.
-Provides pedagogical explanations of parameter savings, zero-initialization invariants, scaling
+Details parameter savings, zero-initialization invariants, scaling
 factors (α/r), model adapter injection, and weight merging for zero-overhead deployment.
 """
 

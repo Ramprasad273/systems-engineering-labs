@@ -22,9 +22,9 @@ While Stage 1 provides rapid, unsupervised sequence surprisal scoring for anomal
 
 ---
 
-## First-Principles Pedagogical Architecture
+## First-Principles Architecture
 
-To demystify parameter-efficient fine-tuning, this codebase implements LoRA mathematics directly from first principles (`src/models/lora.py`):
+To implement parameter-efficient fine-tuning without hidden abstractions, this codebase implements LoRA mathematics directly from first principles (`src/models/lora.py`):
 
 ```text
 Delta_W = (alpha / r) * (B * A)
@@ -70,7 +70,7 @@ stage2-qlora/
 │   ├── analyze_results.py            # LaTeX table report compiler
 │   └── generate_blog_figures.py      # Matplotlib publication figure generator
 ├── src/
-│   ├── models/lora.py                # Pedagogical LoRA math implementation
+│   ├── models/lora.py                # LoRA math implementation (`Delta_W = BA`)
 │   ├── dataset/
 │   │   ├── sft_dataset.py            # ChatML dataset with target=-100 masking
 │   │   └── data_loader.py            # DataLoader factory

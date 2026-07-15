@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Activation Function Ablation Study (B4).
 
-Pedagogical explanations of why SwiGLU gating improves feature representation over standard
+Details why SwiGLU gating improves feature representation over standard
 GELU activations, explicit tensor shapes, structured telemetry, and idempotency checks.
 """
 

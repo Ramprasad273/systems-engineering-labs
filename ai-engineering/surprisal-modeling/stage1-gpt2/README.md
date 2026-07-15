@@ -455,4 +455,4 @@ Ensure `num_workers: 4` and `pin_memory: true` in your configuration to maximize
 
 ## License
 
-MIT License — see `LICENSE` for details.
+MIT License see `LICENSE` for details.

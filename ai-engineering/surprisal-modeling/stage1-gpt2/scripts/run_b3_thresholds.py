@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Threshold Comparison Analysis (B3).
 
-Pedagogical explanations of why Extreme Value Theory (EVT) fits tail distributions better
+Details why Extreme Value Theory (EVT) fits tail distributions better
 than empirical percentiles or Gaussian approximations for anomaly thresholds, structured telemetry,
 and idempotency checks.
 """

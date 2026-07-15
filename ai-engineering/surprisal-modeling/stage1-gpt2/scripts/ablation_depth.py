@@ -1,6 +1,6 @@
 """Model Depth Ablation Study.
 
-Pedagogical docstrings explaining why depth ablations require independent
+Explains why depth ablations require independent
 threshold calibration, explicit shapes, structured telemetry, and idempotency.
 """
 

@@ -2,7 +2,7 @@
 """
 CLI wrapper for training custom Byte-Pair Encoding (BPE) log tokenizers.
 
-Pedagogical explanations of why dynamic variable masking precedes BPE training,
+Details why dynamic variable masking precedes BPE training,
 structured telemetry, and idempotency checks.
 """
 import argparse

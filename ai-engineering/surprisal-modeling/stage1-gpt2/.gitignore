@@ -28,7 +28,7 @@ logs.txt
 *.log.*
 data/**/*.log
 
-# ── Ablation runtime artifacts (large) — keep the JSON result files ───────────
+# ── Ablation runtime artifacts (large) keep the JSON result files ───────────
 data/ablations/*.pt
 data/ablations/*_corpus.txt
 data/ablations/tok_v*.json

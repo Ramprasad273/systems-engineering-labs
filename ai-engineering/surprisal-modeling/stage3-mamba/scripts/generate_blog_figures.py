@@ -1,6 +1,6 @@
-"""Publication and Viral Feynman Blog Chart Generator (`generate_blog_figures.py`).
+"""Publication Figure Generator (`generate_blog_figures.py`).
 
-- Generates publication-ready `matplotlib` vector/raster figures:
+- Generates `matplotlib` figures:
   1. `vram_scaling_curve.png`: Quadratic Attention vs Flat Mamba O(1) Memory Scaling across context horizons.
   2. `latency_comparison_bar.png`: 3.4x Throughput Acceleration (`ms/log` and `Joules/1M logs`).
   3. `anomaly_f1_parity.png`: Anomaly Detection F1 Parity and Sensitivity Curve across K-factors.

@@ -157,16 +157,16 @@ def main():
         if split["top_unk_contexts"]:
             print(f"  Top UNK contexts:")
             for ctx in split["top_unk_contexts"][:3]:
-                print(f"    [{ctx['count']:4d}×] {ctx['masked_line'][:70]}")
+                print(f"    [{ctx['count']:4d}x] {ctx['masked_line'][:70]}")
         else:
-            print("  ✓ No [UNK] tokens detected — masking pipeline is stable.")
+            print("  [PASS] No [UNK] tokens detected - masking pipeline is stable.")
 
     if normal_analysis["total_unk"] == 0 and anomaly_analysis["total_unk"] == 0:
-        print("\n✓ PASS: Zero [UNK] tokens in both normal and anomaly splits.")
+        print("\n[PASS] Zero [UNK] tokens in both normal and anomaly splits.")
         print("  The masking pipeline preserves all structural vocabulary tokens.")
     else:
         unk_rate = normal_analysis["unk_rate"] + anomaly_analysis["unk_rate"]
-        print(f"\n⚠ WARNING: [UNK] tokens detected. Combined UNK rate: {unk_rate:.6f}")
+        print(f"\n[WARNING] [UNK] tokens detected. Combined UNK rate: {unk_rate:.6f}")
         print("  Review masking regexes for over-aggressive pattern matching.")
 
     print(f"\nFull analysis written to: {args.output}")

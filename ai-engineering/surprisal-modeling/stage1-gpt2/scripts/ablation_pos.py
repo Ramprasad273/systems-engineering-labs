@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Positional Embedding Ablation Study (B2).
 
-Pedagogical explanations of why Rotary Embeddings (RoPE) outperform learned absolute
+Details why Rotary Embeddings (RoPE) outperform learned absolute
 positional embeddings on log data (relative distance invariance), explicit tensor shapes [batch_size, seq_len],
 structured telemetry, and idempotency checks.
 """

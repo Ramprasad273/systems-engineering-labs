@@ -3,8 +3,8 @@
 # Entrypoint: Fix LD_LIBRARY_PATH for WSL2 host driver symbol resolution.
 #
 # On WSL2, NVIDIA driver libraries are split across two host paths:
-#   1. /usr/lib/wsl/lib        — standard CUDA stubs (always present)
-#   2. /usr/lib/wsl/drivers/   — arch-specific symbols for newer GPUs/drivers
+#   1. /usr/lib/wsl/lib        standard CUDA stubs (always present)
+#   2. /usr/lib/wsl/drivers/   arch-specific symbols for newer GPUs/drivers
 #
 # The CUDA Error 500 ("named symbol not found") happens when PyTorch can only
 # find the stubs in (1) but not the real symbols from (2). This script detects
