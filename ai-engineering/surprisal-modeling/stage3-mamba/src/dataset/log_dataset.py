@@ -1,6 +1,5 @@
 """Packed Sequence Dataset Loader for Stage 3 Mamba & MambaLog Experiments.
 
-Pedagogical and clean implementation following Karpathy coding guidelines:
 - Zero padding waste via pre-packed sequences (seq_len=512) inherited from Stage 1.
 - Explicit shape annotations (`[num_sequences, seq_len]`) and docstrings.
 - Clean fallback path resolution across shared repository structures.

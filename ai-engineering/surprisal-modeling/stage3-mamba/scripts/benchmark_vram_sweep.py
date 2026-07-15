@@ -1,6 +1,5 @@
 """Suite 1: Context Length VRAM Memory Footprint Scaling Sweep (`benchmark_vram_sweep.py`).
 
-Pedagogical hardware benchmark following Karpathy guidelines:
 - Evaluates peak allocated GPU memory (`torch.cuda.max_memory_allocated()`) across context horizons $L \in \{128, \dots, 8192\}$.
 - Demonstrates quadratic attention memory wall ($O(T^2)$) where GPT-2 crashes with CUDA Out of Memory (OOM) at $4,096$ tokens.
 - Demonstrates Mamba S6's flat $O(1)$ recurrent memory profile across extended context horizons.

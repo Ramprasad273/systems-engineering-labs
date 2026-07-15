@@ -1,6 +1,5 @@
 """Stage 3 Pre-Training Loop for Mamba S6 & MambaLog Architectures.
 
-Pedagogical engineering following Karpathy clean code guidelines:
 - Strict AdamW parameter decay separation (regularizing 2D weight projections while keeping 1D biases and RMSNorm scaling vectors unpenalized).
 - Cosine annealing learning rate schedule with linear warmup (`warmup_steps=1000`).
 - Multi-seed pre-training runner (`seeds: [42, 123, 999]`) ensuring strict statistical reproducibility.

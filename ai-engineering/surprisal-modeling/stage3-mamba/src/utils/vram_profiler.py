@@ -1,6 +1,5 @@
 """VRAM Memory Tracker and NVIDIA GPU Power Wattage Profiler.
 
-Pedagogical hardware telemetry tool following Karpathy guidelines:
 - Monitors peak allocated VRAM (`torch.cuda.max_memory_allocated()`).
 - Profiles live GPU power consumption (`nvidia-smi --query-gpu=power.draw`) across Windows/Linux.
 - Computes energy efficiency metrics (`Joules / 1M logs` and `Mean/Peak Watts`).

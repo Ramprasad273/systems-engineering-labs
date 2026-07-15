@@ -2,7 +2,6 @@
 # ==============================================================================
 # Master Execution Script: Stage 3 Mamba Speed Layer Paper Experiments
 # ==============================================================================
-# Pedagogical, one-click execution runner following Karpathy clean code guidelines.
 # Reproduces all pre-training runs, threshold calibrations, VRAM stress tests,
 # throughput profiles, and publication figure/table generation for Phase 3.
 #

@@ -1,6 +1,5 @@
 """Suite 3: Latency (`ms/log`), Firehose Ingestion (`logs/sec`), and Energy Profiling (`benchmark_throughput.py`).
 
-Pedagogical hardware telemetry script following Karpathy guidelines:
 - Benchmarks single-step `step()` recurrence ($O(1)$ memory) vs full-sequence batch `forward()` ($O(L)$).
 - Tracks instantaneous GPU power draw via `nvidia-smi` to compute exact energy metrics (`Joules / 1M logs`).
 - Verifies Mamba's ~3.4x throughput acceleration over Stage 1 causal transformer baselines (`~8.4 ms/log`).

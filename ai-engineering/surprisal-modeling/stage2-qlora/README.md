@@ -4,7 +4,7 @@ This repository implements **Stage 2** of the Distributed System Log Analysis & 
 
 ---
 
-## 🔬 Stage 1 vs Stage 2 Comparative Analysis
+## Stage 1 vs Stage 2 Comparative Analysis
 
 While Stage 1 provides rapid, unsupervised sequence surprisal scoring for anomaly detection, it outputs only scalar anomaly flags without actionable explanation. Stage 2 bridges this gap by delivering full structured root-cause explanations while simultaneously boosting binary detection F1.
 
@@ -14,26 +14,28 @@ While Stage 1 provides rapid, unsupervised sequence surprisal scoring for anomal
 | **Output Format** | Scalar Log-Probability / Surprisal Flag | Structured JSON Diagnosis Schema |
 | **Binary Anomaly F1 Score** | `89.23%` | **`90.85%` (+1.62%)** |
 | **Binary Anomaly Accuracy** | `95.28%` | **`96.10%` (+0.82%)** |
-| **Root-Cause Explanation** | ❌ None | ✅ Structured Diagnostic Summary |
-| **Severity Classification** | ❌ None | ✅ Multi-Class Macro F1: `0.8890` |
-| **Automated Mitigation** | ❌ None | ✅ Concrete CLI / SRE Action Commands |
+| **Root-Cause Explanation** | None | Structured Diagnostic Summary |
+| **Severity Classification** | None | Multi-Class Macro F1: `0.8890` |
+| **Automated Mitigation** | None | Concrete CLI / SRE Action Commands |
 | **Peak VRAM Footprint** | `1,616 MB` (124M FP16) | `5,120 MB` (3.09B NF4 + LoRA) |
 | **Inference SLO (p95)** | `< 50 ms` (Speed Layer) | `1,210 ms` (Batch/Serving Layer SLO < 2s) |
 
 ---
 
-## 🧠 First-Principles Pedagogical Architecture
+## First-Principles Pedagogical Architecture
 
 To demystify parameter-efficient fine-tuning, this codebase implements LoRA mathematics directly from first principles (`src/models/lora.py`):
 
-$$\Delta W = \frac{\alpha}{r} (B A)$$
+```text
+Delta_W = (alpha / r) * (B * A)
+```
 
-- **Zero-Initialization Invariant**: Matrix $A \in \mathbb{R}^{r \times d_{in}}$ is initialized via Kaiming uniform distribution, while matrix $B \in \mathbb{R}^{d_{out} \times r}$ is strictly zero-initialized ($B=0$). This guarantees $\Delta W = 0$ at training step $0$, ensuring the fine-tuned adapter begins as an exact identity transformation of the pre-trained weights.
+- **Zero-Initialization Invariant**: Matrix A (`r x d_in`) is initialized via Kaiming uniform distribution, while matrix B (`d_out x r`) is strictly zero-initialized (`B = 0`). This guarantees `Delta_W = 0` at training step `0`, ensuring the fine-tuned adapter begins as an exact identity transformation of the pre-trained weights.
 - **Prompt Loss Masking**: During training (`src/dataset/sft_dataset.py`), all system instructions and user log input tokens are masked with `target = -100`. Gradients flow exclusively from generating the structured JSON completion tokens.
 
 ---
 
-## 🚀 Quick Start & Verification
+## Quick Start & Verification
 
 ### 1. Verification Suite (Offline & Unit Tests)
 Run unit tests across LoRA math, dataset masking, and evaluation telemetry:
@@ -54,7 +56,7 @@ python inference.py --mock
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 stage2-qlora/

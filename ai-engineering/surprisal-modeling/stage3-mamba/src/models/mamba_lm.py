@@ -1,6 +1,5 @@
 """Mamba Language Model Head Architecture (`~125M` capacity parameter parity).
 
-Pedagogical implementation following Karpathy clean code guidelines:
 - Stacks 24 homogeneous S6 ResidualBlocks (`MambaBlock` with E=2) to match FLOPs and parameter count of 12 Transformer blocks.
 - Weight-tied embedding and LMHead (`[vocab_size, d_model]`).
 - Academic normal weight initialization (`std=0.02`).

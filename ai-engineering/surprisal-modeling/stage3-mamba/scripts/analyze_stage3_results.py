@@ -1,6 +1,5 @@
 """Stage 3 Comparative Synthesis and Publication Table Generator (`analyze_stage3_results.py`).
 
-Pedagogical analysis script following Karpathy guidelines:
 - Synthesizes Stage 1 (GPT-2) baseline metrics against Stage 3 (Mamba S6 & MambaLog) experimental outputs.
 - Formats production markdown table (`results/stage3_comparison_table.md`) and CSV (`stage3_comparison_table.csv`)
   ready for insertion into research papers (*NeurIPS/MLSys*).

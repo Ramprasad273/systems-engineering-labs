@@ -1,6 +1,5 @@
 """Publication and Viral Feynman Blog Chart Generator (`generate_blog_figures.py`).
 
-Pedagogical data visualization following Karpathy and Feynman communication principles:
 - Generates publication-ready `matplotlib` vector/raster figures:
   1. `vram_scaling_curve.png`: Quadratic Attention vs Flat Mamba O(1) Memory Scaling across context horizons.
   2. `latency_comparison_bar.png`: 3.4x Throughput Acceleration (`ms/log` and `Joules/1M logs`).

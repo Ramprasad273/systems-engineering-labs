@@ -1,6 +1,5 @@
 """Hybrid MambaLog Language Model (`3:1` Interleaved Mamba:Attention).
 
-Pedagogical engineering following Karpathy guidelines:
 - Interleaves 18 Mamba blocks with 6 Causal Self-Attention (RoPE + SwiGLU) blocks (`indices: [3, 7, 11, 15, 19, 23]`).
 - Evaluates syntax efficiency of S6 vs long-context template stability of causal attention across 8,192-token sessions.
 - Explicit shape annotations and docstrings explaining WHY hybrid interleaving works.

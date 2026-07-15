@@ -1,6 +1,5 @@
 """Evaluation metrics, surprisal threshold derivation, and anomaly classification utilities.
 
-Pedagogical and clean implementation following Karpathy guidelines:
 - Unsupervised surprisal anomaly threshold derivation (`tau = mu + 3 * sigma`).
 - Exact binary classification confusion matrix accounting (`TP, FP, TN, FN, Precision, Recall, F1`).
 - Numerical overflow guards (`exp(loss)` perplexity scaling).

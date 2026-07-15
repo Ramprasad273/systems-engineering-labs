@@ -1,6 +1,5 @@
 """Core S6 Selective State Space Model (MambaBlock) and ResidualBlock implementation.
 
-Pedagogical and modular engineering following Karpathy guidelines:
 - Zero-Order Hold (ZOH) discretization derived explicitly.
 - Hardware-aware CUDA kernel wrapper (`selective_scan_fn`) with pure-PyTorch fallback (`selective_scan_pytorch`)
   guaranteeing exact tensor shape (`[B, L, D]`) and backward gradient verification across all OS environments.

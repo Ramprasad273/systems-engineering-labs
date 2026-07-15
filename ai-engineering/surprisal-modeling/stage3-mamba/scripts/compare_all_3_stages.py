@@ -1,6 +1,5 @@
 """Master Cross-Stage Comparative Telemetry & Synthesis Suite (`compare_all_3_stages.py`).
 
-Pedagogical and comprehensive evaluation tool following Karpathy guidelines:
 - Directly compares Stage 1 (GPT-2), Stage 2 (Qwen-2.5-3B QLoRA), and Stage 3 (Mamba S6 & MambaLog).
 - Formats universal publication tables (`results/all_3_stages_universal_comparison.md` & `.csv`) for NeurIPS/MLSys.
 - Generates unified tri-layer architectural figures illustrating why the Speed Layer (Stage 3) and Diagnostic Layer (Stage 2)

@@ -1,6 +1,4 @@
 """Surprisal Threshold Calibration & Anomaly Classification Evaluation (`evaluate.py`).
-
-Pedagogical engineering following Karpathy clean code guidelines:
 - Evaluates unreduced per-token cross-entropy loss across valid log syntax (masking out padding `pad_token_id=5`).
 - Calibrates Gaussian anomaly threshold (`tau = mu_val + 3 * sigma_val`) on healthy HDFS validation split.
 - Evaluates precision, recall, accuracy, and F1 across all 72,661 held-out test log sequences.

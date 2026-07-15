@@ -14,7 +14,7 @@
 
 Modern hyperscale distributed systems generate massive volumes of unstructured syslog streams.
 Supervised anomaly detection fails here due to extreme label scarcity and the non-stationary
-nature of volatile log identifiers. This repository presents **`surprisal-gpt2`** — a fully
+nature of volatile log identifiers. This repository presents **`surprisal-gpt2`**: a fully
 unsupervised anomaly detection system built on **statistical surprisal**. We train a custom
 GPT-2 Small transformer to model the conditional token distribution of structurally normal HDFS
 execution traces. At inference, anomalous log blocks induce high cross-entropy loss, which we
@@ -133,7 +133,7 @@ stage1-gpt2/
 
 ## Installation
 
-### Option A — Docker (Recommended for full reproducibility)
+### Option A: Docker (Recommended for full reproducibility)
 
 Requires: Docker, NVIDIA Container Toolkit.
 
@@ -152,7 +152,7 @@ docker compose up --build -d
 docker compose exec surprisal-gpt2-train bash
 ```
 
-### Option B — Local Python Environment
+### Option B: Local Python Environment
 
 Requires: Python 3.10+, CUDA 12.1+.
 
@@ -219,18 +219,18 @@ All ablation scripts are in `scripts/`. Run them overnight **after** training an
 Results are written to `data/ablations/*.json` and then rendered into paper tables.
 
 ```bash
-# 1. Correctness check (5 min) — verify zero [UNK] tokens after masking
+# 1. Correctness check (5 min): verify zero [UNK] tokens after masking
 python scripts/token_stability_check.py --config config/stage1_config.yaml
 
-# 2. Threshold sensitivity (10 min) — precision-recall vs. k in τ=μ+kσ
+# 2. Threshold sensitivity (10 min): precision-recall vs. k in τ=μ+kσ
 python scripts/threshold_sensitivity.py \
     --config config/stage1_config.yaml \
     --checkpoint data/checkpoints/checkpoint_10000.pt
 
-# 3. Vocabulary size ablation (4 hrs) — V∈{500,1K,2K,5K,10K}
+# 3. Vocabulary size ablation (4 hrs): V∈{500,1K,2K,5K,10K}
 python scripts/ablation_vocab.py --config config/stage1_config.yaml
 
-# 4. Model depth ablation (6 hrs) — L∈{2,4,8,12}
+# 4. Model depth ablation (6 hrs): L∈{2,4,8,12}
 python scripts/ablation_depth.py --config config/stage1_config.yaml
 
 # 5. Generate all paper tables
@@ -347,14 +347,16 @@ Set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in your environment (pre-
 The pre-training engine automatically fuses transformer layers into optimized Triton CUDA kernels using `torch.compile(model)`. This provides a ~30–40% training speedup on Ampere and Ada Lovelace architectures (RTX 3000/4000 series, A100/H100). If running on older architectures or debugging CPU backends, disable compilation by setting `compile: false` in `config/stage1_config.yaml`.
 
 ### 3. FlashAttention Scaled Dot-Product Attention (SDPA)
-The model leverages PyTorch 2.4+ `F.scaled_dot_product_attention`, automatically selecting FlashAttention kernels or Memory-Efficient Attention kernels based on hardware support. This guarantees $\mathcal{O}(T)$ memory scaling instead of quadratic $\mathcal{O}(T^2)$ memory growth.
+The model leverages PyTorch 2.4+ `F.scaled_dot_product_attention`, automatically selecting FlashAttention kernels or Memory-Efficient Attention kernels based on hardware support. This guarantees O(T) memory scaling instead of quadratic O(T^2) memory growth.
 
 ### 4. Gradient Accumulation & Effective Batch Size
 To train with large effective batch sizes on consumer GPUs (e.g., 8 GB VRAM), adjust `gradient_accumulation_steps` and `batch_size` in `config/stage1_config.yaml`:
 
-$$\text{Effective Batch Size} = B \times G$$
+```text
+Effective Batch Size = B * G
+```
 
-Where $B$ is `batch_size` (e.g., 16) and $G$ is `gradient_accumulation_steps` (e.g., 4), yielding a default effective batch size of $16 \times 4 = 64$. For 24 GB+ GPUs, increase `batch_size` to 64 and set `gradient_accumulation_steps` to 1.
+Where B is `batch_size` (e.g., 16) and G is `gradient_accumulation_steps` (e.g., 4), yielding a default effective batch size of 16 * 4 = 64. For 24 GB+ GPUs, increase `batch_size` to 64 and set `gradient_accumulation_steps` to 1.
 
 ### 5. DataLoader Parallelism & Memory Pinning
 Ensure `num_workers: 4` and `pin_memory: true` in your configuration to maximize asynchronous CUDA memory transfers between host CPU and GPU tensors.
