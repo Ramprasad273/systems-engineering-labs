@@ -1,0 +1,4 @@
+architecture,params_m,vram_4k_gb,vram_8k_gb,latency_ms_per_log,throughput_logs_sec,energy_joules_1m,val_ppl,test_f1,precision,recall
+Stage 1: GPT-2 (Transformer),124.4,OOM (>24.0 GB),OOM (>24.0 GB),28.5,35.09,812500.0,1.482,0.9634,0.9712,0.9558
+Stage 3: Mamba S6 (24 blocks),125.1,1.12 GB,1.72 GB,0.4076,2453.62,69740.86,1.386,0.7284,0.8939,0.6146
+Stage 3: Hybrid MambaLog (3:1),125.3,1.24 GB,1.84 GB,0.9067,1102.85,170815.05,1.363,0.8139,0.9098,0.7363

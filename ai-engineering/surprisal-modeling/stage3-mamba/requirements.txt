@@ -1,0 +1,16 @@
+# Core Deep Learning & Scientific Stack
+# Pinned to torch>=2.4.0 to support @torch.library.custom_op required by modern mamba-ssm / causal-conv1d
+torch>=2.4.0
+# Pinned below 2.0 to ensure C++ ABI compatibility across PyTorch tensor/numpy boundaries
+numpy>=1.24.0,<2.0.0
+pyyaml>=6.0
+tqdm>=4.65.0
+pytest>=7.4.0
+matplotlib>=3.7.0
+packaging>=23.0
+ninja>=1.11.0
+
+# Optional Hardware-Accelerated CUDA S6 & Depthwise Convolution Extensions
+# Automatically skipped on Windows or non-CUDA build environments where pure-PyTorch fallback is used
+causal-conv1d>=1.1.0; sys_platform != 'win32' and platform_machine == 'x86_64'
+mamba-ssm>=1.2.0; sys_platform != 'win32' and platform_machine == 'x86_64'

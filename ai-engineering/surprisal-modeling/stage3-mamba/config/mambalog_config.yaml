@@ -1,0 +1,39 @@
+model:
+  vocab_size: 5000
+  n_embd: 768
+  n_layer: 24
+  d_state: 16
+  expand: 2
+  conv_kernel: 4
+  dt_rank: "auto"
+  n_head: 12
+  d_ff: 2048
+  layer_norm_epsilon: 1e-5
+  use_rotary: true
+  use_swiglu: true
+  attn_layer_indices: [3, 7, 11, 15, 19, 23] # 3:1 Hybrid interleaving (18 Mamba : 6 Causal Attention blocks)
+  pad_token_id: 5
+  eos_token_id: 5
+
+dataset:
+  processed_dir: "../stage1-gpt2/data/processed"
+  train_split: 0.90
+  seq_len: 512
+  batch_size: 4
+
+tokenizer:
+  save_path: "../stage1-gpt2/data/tokenizer/log_tokenizer.json"
+  vocab_size: 5000
+
+training:
+  max_lr: 6.0e-4
+  min_lr: 6.0e-5
+  warmup_steps: 50
+  max_steps: 500
+  weight_decay: 0.1
+  gradient_accumulation_steps: 4
+  clip_grad: 1.0
+  checkpoint_interval: 250
+  checkpoint_dir: "data/checkpoints_mambalog"
+  results_path: "data/mambalog_results.json"
+  seeds: [42, 123, 999]

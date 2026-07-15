@@ -1,0 +1,20 @@
+{
+  "seed_42": {
+    "seed": 42,
+    "final_val_loss": 0.3271,
+    "final_val_ppl": 1.3869,
+    "checkpoint_path": "data/checkpoints/mamba_seed_42_final.pt"
+  },
+  "seed_123": {
+    "seed": 123,
+    "final_val_loss": 0.3276,
+    "final_val_ppl": 1.3876,
+    "checkpoint_path": "data/checkpoints/mamba_seed_123_final.pt"
+  },
+  "seed_999": {
+    "seed": 999,
+    "final_val_loss": 0.3282,
+    "final_val_ppl": 1.3885,
+    "checkpoint_path": "data/checkpoints/mamba_seed_999_final.pt"
+  }
+}

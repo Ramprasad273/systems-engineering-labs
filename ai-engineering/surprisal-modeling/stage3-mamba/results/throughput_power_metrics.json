@@ -1,0 +1,58 @@
+{
+  "MAMBA": {
+    "recurrent_step": {
+      "elapsed_sec": 13.0419,
+      "latency_ms_per_log": 0.4076,
+      "logs_per_sec": 2453.62,
+      "peak_vram_mb": 463.64,
+      "mean_watts": 171.12,
+      "peak_watts": 185.46,
+      "joules_per_1m_logs": 69740.86,
+      "mode": "recurrent_step_O1",
+      "batch_size": 16,
+      "num_steps": 2000,
+      "total_logs_processed": 32000
+    },
+    "parallel_forward": {
+      "elapsed_sec": 67.9816,
+      "latency_ms_per_log": 21.2443,
+      "logs_per_sec": 47.07,
+      "peak_vram_mb": 1032.27,
+      "mean_watts": 195.8,
+      "peak_watts": 197.65,
+      "joules_per_1m_logs": 4159573.0,
+      "mode": "parallel_forward_seq_512",
+      "batch_size": 16,
+      "num_batches": 200,
+      "total_logs_processed": 3200
+    }
+  },
+  "MAMBALOG": {
+    "recurrent_step": {
+      "elapsed_sec": 29.0157,
+      "latency_ms_per_log": 0.9067,
+      "logs_per_sec": 1102.85,
+      "peak_vram_mb": 1161.0,
+      "mean_watts": 188.38,
+      "peak_watts": 198.13,
+      "joules_per_1m_logs": 170815.05,
+      "mode": "recurrent_step_O1",
+      "batch_size": 16,
+      "num_steps": 2000,
+      "total_logs_processed": 32000
+    },
+    "parallel_forward": {
+      "elapsed_sec": 75.8084,
+      "latency_ms_per_log": 23.6901,
+      "logs_per_sec": 42.21,
+      "peak_vram_mb": 1131.98,
+      "mean_watts": 190.09,
+      "peak_watts": 192.35,
+      "joules_per_1m_logs": 4503178.84,
+      "mode": "parallel_forward_seq_512",
+      "batch_size": 16,
+      "num_batches": 200,
+      "total_logs_processed": 3200
+    }
+  }
+}

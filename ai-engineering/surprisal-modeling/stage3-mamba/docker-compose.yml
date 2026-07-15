@@ -1,0 +1,38 @@
+services:
+  surprisal-mamba-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: surprisal-mamba-container
+    ipc: host
+    shm_size: '8gb'
+    working_dir: /workspace/stage3-mamba
+    volumes:
+      # Map current stage 3 project directory to /workspace/stage3-mamba
+      - .:/workspace/stage3-mamba
+      # Map stage1 directory as read-only so Stage 1 pre-packed tensors and tokenizer can be inherited seamlessly (`../stage1-gpt2`)
+      - ../stage1-gpt2:/workspace/stage1-gpt2:ro
+      # Map stage2 directory as read-only for unified cross-stage comparative telemetry (`../stage2-qlora`)
+      - ../stage2-qlora:/workspace/stage2-qlora:ro
+      # --- WSL2 GPU Driver Fix ---
+      # Mount the WSL2 host driver library directories so the container can
+      # resolve CUDA symbols that live outside the standard /usr/lib/wsl/lib path.
+      # This is required for NVIDIA driver >= 560 on Windows/WSL2 Docker Desktop.
+      - /usr/lib/wsl:/usr/lib/wsl:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - OMP_NUM_THREADS=4
+      # Essential for RTX 3060 Ti (8 GB VRAM) to prevent memory fragmentation during training & evaluation
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - PYTHONPATH=/workspace/stage3-mamba:/workspace/stage1-gpt2:/workspace
+      - CUDA_LAUNCH_BLOCKING=0
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
